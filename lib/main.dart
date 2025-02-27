@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
 
-      title: 'E-commerc App',
+      title: 'E-commerc FLutter App',
       home: CustomBottomNavbar(),
     );
   }
