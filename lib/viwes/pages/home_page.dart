@@ -1,3 +1,5 @@
+import 'package:ecommerce_app/models/product_item_model.dart';
+import 'package:ecommerce_app/viwes/widgets/product_item.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatelessWidget {
@@ -5,7 +7,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: SingleChildScrollView(
         child: SafeArea(
           child: Padding(
@@ -54,6 +56,42 @@ class HomePage extends StatelessWidget {
                       ],
                     ),
                   ],
+                ),
+                SizedBox(height: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      'New Arrivals',
+                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    Text(
+                      'See All',
+                      style: Theme.of(context).textTheme.labelLarge!.copyWith(
+                        color: Theme.of(context).primaryColor,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+
+                SizedBox(height: 16),
+
+                GridView.builder(
+                  itemCount: dummyProducts.length,
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    mainAxisSpacing: 25,
+                    crossAxisSpacing: 10,
+                  ),
+                  itemBuilder: (context, index) {
+                    return ProductItem(productItem: dummyProducts[index]);
+                  },
                 ),
               ],
             ),
