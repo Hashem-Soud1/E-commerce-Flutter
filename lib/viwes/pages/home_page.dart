@@ -1,6 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:ecommerce_app/models/home_carouesl_item_model.dart';
 import 'package:ecommerce_app/models/product_item_model.dart';
 import 'package:ecommerce_app/viwes/widgets/product_item.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -21,7 +24,7 @@ class HomePage extends StatelessWidget {
                       children: [
                         CircleAvatar(
                           radius: 25,
-                          backgroundImage: NetworkImage(
+                          backgroundImage: CachedNetworkImageProvider(
                             'https://as2.ftcdn.net/jpg/02/24/86/95/1000_F_224869519_aRaeLneqALfPNBzg0xxMZXghtvBXkfIA.jpg',
                           ),
                         ),
@@ -57,6 +60,37 @@ class HomePage extends StatelessWidget {
                     ),
                   ],
                 ),
+                SizedBox(height: 16),
+
+                FlutterCarousel.builder(
+                  itemCount: dummyHomeCarouselItems.length,
+                  itemBuilder:
+                      (
+                        BuildContext context,
+                        int itemIndex,
+                        int pageViewIndex,
+                      ) => Padding(
+                        padding: const EdgeInsetsDirectional.only(end: 16.0),
+
+                        child: CachedNetworkImage(
+                          imageUrl: dummyHomeCarouselItems[itemIndex].imgUrl,
+                          fit: BoxFit.cover,
+                          placeholder:
+                              (context, url) =>
+                                  CircularProgressIndicator.adaptive(),
+                          errorWidget:
+                              (context, url, error) => Icon(Icons.error),
+                        ),
+                      ),
+                  options: FlutterCarouselOptions(
+                    height: 200.0,
+                    autoPlay: true,
+                    showIndicator: true,
+                  ),
+                ),
+
+                SizedBox(height: 16),
+
                 SizedBox(height: 16),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
