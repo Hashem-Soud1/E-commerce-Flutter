@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ecommerce_app/utils/app_routes.dart';
 import 'package:ecommerce_app/view_model/home_state/cubit/home_cubit.dart';
-import 'package:ecommerce_app/viwes/pages/product_details_page.dart';
 import 'package:ecommerce_app/viwes/widgets/product_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -94,10 +93,10 @@ class HomeTabView extends StatelessWidget {
                   itemBuilder: (context, index) {
                     return InkWell(
                       onTap: () {
-                        Navigator.of(
-                          context,
-                          rootNavigator: true,
-                        ).pushNamed(AppRoutes.PRODUCT_DETAIL);
+                        Navigator.of(context, rootNavigator: true).pushNamed(
+                          AppRoutes.PRODUCT_DETAIL,
+                          arguments: state.products[index].id,
+                        );
                       },
                       child: ProductItem(productItem: state.products[index]),
                     );

@@ -10,7 +10,10 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => CustomBottomNavbar());
 
       case AppRoutes.PRODUCT_DETAIL:
-        return MaterialPageRoute(builder: (_) => ProductDetailsPage());
+        final productId = settings.arguments as String;
+        return MaterialPageRoute(
+          builder: (_) => ProductDetailsPage(productId: productId),
+        );
 
       default:
         return MaterialPageRoute(
