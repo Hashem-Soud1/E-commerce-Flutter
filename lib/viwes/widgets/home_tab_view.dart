@@ -1,5 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:ecommerce_app/utils/app_routes.dart';
 import 'package:ecommerce_app/view_model/home_state/cubit/home_cubit.dart';
+import 'package:ecommerce_app/viwes/pages/product_details_page.dart';
 import 'package:ecommerce_app/viwes/widgets/product_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -48,7 +50,7 @@ class HomeTabView extends StatelessWidget {
                           ),
                         ),
                     options: FlutterCarouselOptions(
-                      height: 180.0,
+                      height: 150.0,
                       autoPlay: true,
                       showIndicator: true,
                       floatingIndicator: true,
@@ -90,7 +92,15 @@ class HomeTabView extends StatelessWidget {
                     crossAxisSpacing: 15,
                   ),
                   itemBuilder: (context, index) {
-                    return ProductItem(productItem: state.products[index]);
+                    return InkWell(
+                      onTap: () {
+                        Navigator.of(
+                          context,
+                          rootNavigator: true,
+                        ).pushNamed(AppRoutes.PRODUCT_DETAIL);
+                      },
+                      child: ProductItem(productItem: state.products[index]),
+                    );
                   },
                 ),
               ],

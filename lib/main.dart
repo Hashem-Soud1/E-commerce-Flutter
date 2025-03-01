@@ -1,4 +1,4 @@
-import 'package:ecommerce_app/viwes/pages/custom_bottom_navbar.dart';
+import 'package:ecommerce_app/utils/app_router.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
 
       title: 'E-commerc FLutter App',
-      home: CustomBottomNavbar(),
+      onGenerateRoute: AppRouter.onGenerateRoute,
     );
   }
 }

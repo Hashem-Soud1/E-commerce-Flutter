@@ -8,7 +8,7 @@ class CategoryCubit extends Cubit<CategoryState> {
 
   void fetchCategories() {
     emit(CategoryLoading());
-    Future.delayed(Duration(seconds: 2), () {
+    Future.delayed(Duration(seconds: 1), () {
       emit(CategoryLoaded(categories: dummyCategories));
     });
   }

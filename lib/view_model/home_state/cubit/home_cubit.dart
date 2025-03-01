@@ -10,7 +10,7 @@ class HomeCubit extends Cubit<HomeState> {
   void fetchHomeData() {
     emit(HomeLoading());
 
-    Future.delayed(Duration(seconds: 2), () {
+    Future.delayed(Duration(seconds: 1), () {
       emit(
         HomeLoaded(
           carouselItems: dummyHomeCarouselItems,
