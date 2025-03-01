@@ -9,12 +9,13 @@ class ProductItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
         Stack(
           children: [
             Container(
-              height: 120,
-              width: 200,
+              height: 110,
+              width: 180,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12.0),
                 color: Colors.grey.shade200,
@@ -61,13 +62,13 @@ class ProductItem extends StatelessWidget {
           productItem.category,
           style: Theme.of(
             context,
-          ).textTheme.labelMedium!.copyWith(color: Colors.grey),
+          ).textTheme.labelSmall!.copyWith(color: Colors.grey),
         ),
         Text(
           '\$${productItem.price}',
           style: Theme.of(
             context,
-          ).textTheme.titleSmall!.copyWith(fontWeight: FontWeight.w600),
+          ).textTheme.bodySmall!.copyWith(fontWeight: FontWeight.w600),
         ),
       ],
     );

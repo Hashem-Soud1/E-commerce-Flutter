@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:ecommerce_app/view_model/category_state/cubit/category_cubit.dart';
 import 'package:ecommerce_app/view_model/home_state/cubit/home_cubit.dart';
 import 'package:ecommerce_app/viwes/widgets/category_tab_view.dart';
 import 'package:ecommerce_app/viwes/widgets/home_tab_view.dart';
@@ -10,12 +11,15 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) {
-        final cubit = HomeCubit();
-        cubit.getHomeData();
-        return cubit;
-      },
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<HomeCubit>(
+          create: (context) => HomeCubit()..fetchHomeData(),
+        ),
+        BlocProvider<CategoryCubit>(
+          create: (context) => CategoryCubit()..fetchCategories(),
+        ),
+      ],
       child: Scaffold(
         body: SafeArea(
           child: Padding(
@@ -68,16 +72,19 @@ class HomePage extends StatelessWidget {
                 SizedBox(height: 16),
 
                 Expanded(
-                  child: DefaultTabController(
-                    length: 2,
-                    child: Scaffold(
-                      appBar: AppBar(
-                        title: const TabBar(
-                          tabs: [Tab(text: 'Home'), Tab(text: 'Category')],
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: DefaultTabController(
+                      length: 2,
+                      child: Scaffold(
+                        appBar: AppBar(
+                          title: const TabBar(
+                            tabs: [Tab(text: 'Home'), Tab(text: 'Category')],
+                          ),
                         ),
-                      ),
-                      body: const TabBarView(
-                        children: [HomeTabView(), CategoryTabView()],
+                        body: const TabBarView(
+                          children: [HomeTabView(), CategoryTabView()],
+                        ),
                       ),
                     ),
                   ),

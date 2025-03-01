@@ -58,8 +58,6 @@ class HomeTabView extends StatelessWidget {
                 ),
 
                 SizedBox(height: 16),
-
-                SizedBox(height: 16),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -88,8 +86,8 @@ class HomeTabView extends StatelessWidget {
                   physics: const NeverScrollableScrollPhysics(),
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
-                    mainAxisSpacing: 10,
-                    crossAxisSpacing: 10,
+                    mainAxisSpacing: 15,
+                    crossAxisSpacing: 15,
                   ),
                   itemBuilder: (context, index) {
                     return ProductItem(productItem: state.products[index]);
