@@ -11,6 +11,11 @@ final class ProductDetailsLoaded extends ProductDetailsState {
   ProductDetailsLoaded(this.product);
 }
 
+final class QuantityCounterLoaded extends ProductDetailsState {
+  final int value;
+  QuantityCounterLoaded({required this.value});
+}
+
 final class ProductDetailsError extends ProductDetailsState {
   final String message;
   ProductDetailsError(this.message);
