@@ -12,260 +12,286 @@ class ProductDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cubit = BlocProvider.of<ProductDetailsCubit>(context);
     final size = MediaQuery.of(context).size;
 
-    return BlocProvider(
-      create: (context) {
-        return ProductDetailsCubit()..fetchProductDetails(productId);
-      },
-      child: Scaffold(
-        body: BlocBuilder<ProductDetailsCubit, ProductDetailsState>(
-          buildWhen:
-              (previous, current) =>
-                  current is! QuantityCounterLoaded && current is! SizeSelected,
-          builder: (context, state) {
-            if (state is ProductDetailsLoading) {
-              return const Scaffold(
-                body: Center(child: CircularProgressIndicator.adaptive()),
-              );
-            } else if (state is ProductDetailsError) {
-              return Scaffold(body: Center(child: Text(state.message)));
-            } else if (state is ProductDetailsLoaded) {
-              final product = state.product;
-              return Scaffold(
-                extendBodyBehindAppBar: true,
-                appBar: AppBar(
-                  backgroundColor: Colors.transparent,
-                  elevation: 0,
-                  title: const Text('Product Details'),
-                  actions: [
-                    IconButton(
-                      icon: const Icon(Icons.favorite_border),
-                      onPressed: () {},
-                    ),
-                  ],
+    return BlocBuilder<ProductDetailsCubit, ProductDetailsState>(
+      bloc: cubit,
+      buildWhen:
+          (previous, current) =>
+              current is ProductDetailsLoading ||
+              current is ProductDetailsLoaded ||
+              current is ProductDetailsError,
+      builder: (context, state) {
+        if (state is ProductDetailsLoading) {
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator.adaptive()),
+          );
+        } else if (state is ProductDetailsError) {
+          return Scaffold(body: Center(child: Text(state.message)));
+        } else if (state is ProductDetailsLoaded) {
+          final product = state.product;
+          return Scaffold(
+            extendBodyBehindAppBar: true,
+            appBar: AppBar(
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              title: const Text('Product Details'),
+              actions: [
+                IconButton(
+                  icon: const Icon(Icons.favorite_border),
+                  onPressed: () {},
                 ),
-                body: Stack(
-                  children: [
-                    Container(
-                      height: size.height * 0.52,
-                      width: double.infinity,
-                      decoration: BoxDecoration(color: AppColors.grey2),
-                      child: Column(
-                        children: [
-                          SizedBox(height: size.height * 0.1),
-                          CachedNetworkImage(
-                            imageUrl: product.imgUrl,
-                            height: size.height * 0.4,
-                          ),
-                        ],
+              ],
+            ),
+            body: Stack(
+              children: [
+                Container(
+                  height: size.height * 0.52,
+                  width: double.infinity,
+                  decoration: BoxDecoration(color: AppColors.grey2),
+                  child: Column(
+                    children: [
+                      SizedBox(height: size.height * 0.1),
+                      CachedNetworkImage(
+                        imageUrl: product.imgUrl,
+                        height: size.height * 0.4,
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: size.height * 0.47),
+                  child: Container(
+                    width: double.infinity,
+                    decoration: const BoxDecoration(
+                      color: AppColors.white,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(50),
+                        topRight: Radius.circular(50),
                       ),
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(top: size.height * 0.47),
-                      child: Container(
-                        width: double.infinity,
-                        decoration: const BoxDecoration(
-                          color: AppColors.white,
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(50),
-                            topRight: Radius.circular(50),
-                          ),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(36.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                    child: Padding(
+                      padding: const EdgeInsets.all(36.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                  Text(
+                                    product.name,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleLarge!
+                                        .copyWith(fontWeight: FontWeight.bold),
+                                  ),
+                                  const SizedBox(height: 6),
+                                  Row(
                                     children: [
-                                      Text(
-                                        product.name,
-                                        style: Theme.of(
-                                          context,
-                                        ).textTheme.titleLarge!.copyWith(
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                                      const Icon(
+                                        Icons.star,
+                                        color: AppColors.yellow,
+                                        size: 25,
                                       ),
-                                      const SizedBox(height: 6),
-                                      Row(
-                                        children: [
-                                          const Icon(
-                                            Icons.star,
-                                            color: AppColors.yellow,
-                                            size: 25,
-                                          ),
-                                          const SizedBox(width: 5),
-                                          Text(
-                                            product.averageRate.toString(),
-                                            style:
-                                                Theme.of(
-                                                  context,
-                                                ).textTheme.titleMedium,
-                                          ),
-                                        ],
+                                      const SizedBox(width: 5),
+                                      Text(
+                                        product.averageRate.toString(),
+                                        style:
+                                            Theme.of(
+                                              context,
+                                            ).textTheme.titleMedium,
                                       ),
                                     ],
                                   ),
-                                  BlocBuilder<
-                                    ProductDetailsCubit,
-                                    ProductDetailsState
-                                  >(
-                                    bloc: BlocProvider.of<ProductDetailsCubit>(
-                                      context,
-                                    ),
-                                    buildWhen:
-                                        (previous, current) =>
-                                            current is QuantityCounterLoaded ||
-                                            current is ProductDetailsLoaded,
-                                    builder: (context, state) {
-                                      if (state is QuantityCounterLoaded) {
-                                        return CounterWidget(
-                                          value: state.value,
-                                          productId: product.id,
-                                          cubit: BlocProvider.of<
-                                            ProductDetailsCubit
-                                          >(context),
-                                        );
-                                      } else if (state
-                                          is ProductDetailsLoaded) {
-                                        return CounterWidget(
-                                          value: state.product.quantity,
-                                          productId: product.id,
-                                          cubit: BlocProvider.of<
-                                            ProductDetailsCubit
-                                          >(context),
-                                        );
-                                      } else {
-                                        return const SizedBox.shrink();
-                                      }
-                                    },
-                                  ),
                                 ],
-                              ),
-                              const SizedBox(height: 16),
-                              Text(
-                                'Size',
-                                style: Theme.of(context).textTheme.titleMedium!
-                                    .copyWith(fontWeight: FontWeight.bold),
                               ),
                               BlocBuilder<
                                 ProductDetailsCubit,
                                 ProductDetailsState
                               >(
-                                bloc: BlocProvider.of<ProductDetailsCubit>(
-                                  context,
-                                ),
+                                bloc: cubit,
                                 buildWhen:
                                     (previous, current) =>
-                                        current is SizeSelected ||
+                                        current is QuantityCounterLoaded ||
                                         current is ProductDetailsLoaded,
                                 builder: (context, state) {
-                                  return Row(
-                                    children:
-                                        ProductSize.values
-                                            .map(
-                                              (size) => Padding(
-                                                padding: const EdgeInsets.only(
-                                                  top: 6.0,
-                                                  right: 8.0,
+                                  if (state is QuantityCounterLoaded) {
+                                    return CounterWidget(
+                                      value: state.value,
+                                      productId: product.id,
+                                      cubit:
+                                          BlocProvider.of<ProductDetailsCubit>(
+                                            context,
+                                          ),
+                                    );
+                                  } else if (state is ProductDetailsLoaded) {
+                                    return CounterWidget(
+                                      value: 1,
+                                      productId: product.id,
+                                      cubit:
+                                          BlocProvider.of<ProductDetailsCubit>(
+                                            context,
+                                          ),
+                                    );
+                                  } else {
+                                    return const SizedBox.shrink();
+                                  }
+                                },
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 16),
+                          Text(
+                            'Size',
+                            style: Theme.of(context).textTheme.titleMedium!
+                                .copyWith(fontWeight: FontWeight.bold),
+                          ),
+                          BlocBuilder<ProductDetailsCubit, ProductDetailsState>(
+                            bloc: cubit,
+                            buildWhen:
+                                (previous, current) =>
+                                    current is SizeSelected ||
+                                    current is ProductDetailsLoaded,
+                            builder: (context, state) {
+                              return Row(
+                                children:
+                                    ProductSize.values
+                                        .map(
+                                          (size) => Padding(
+                                            padding: const EdgeInsets.only(
+                                              top: 6.0,
+                                              right: 8.0,
+                                            ),
+                                            child: InkWell(
+                                              onTap: () {
+                                                BlocProvider.of<
+                                                  ProductDetailsCubit
+                                                >(context).selectSize(size);
+                                              },
+                                              child: DecoratedBox(
+                                                decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  color:
+                                                      state is SizeSelected &&
+                                                              state.size == size
+                                                          ? AppColors.primary
+                                                          : AppColors.white,
+                                                  border: Border.all(
+                                                    color: AppColors.grey2,
+                                                  ),
                                                 ),
-                                                child: InkWell(
-                                                  onTap: () {
-                                                    BlocProvider.of<
-                                                      ProductDetailsCubit
-                                                    >(context).selectSize(size);
-                                                  },
-                                                  child: DecoratedBox(
-                                                    decoration: BoxDecoration(
-                                                      shape: BoxShape.circle,
+                                                child: Padding(
+                                                  padding: const EdgeInsets.all(
+                                                    12.0,
+                                                  ),
+                                                  child: Text(
+                                                    size.name,
+                                                    style: Theme.of(
+                                                      context,
+                                                    ).textTheme.labelMedium!.copyWith(
                                                       color:
                                                           state is SizeSelected &&
                                                                   state.size == size
-                                                              ? AppColors
-                                                                  .primary
-                                                              : AppColors.white,
-                                                      border: Border.all(
-                                                        color:
-                                                            AppColors.black45,
-                                                      ),
-                                                    ),
-                                                    child: Padding(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                            12.0,
-                                                          ),
-                                                      child: Text(
-                                                        size.name,
-                                                        style: Theme.of(
-                                                          context,
-                                                        ).textTheme.labelMedium!.copyWith(
-                                                          color:
-                                                              state
-                                                                          is SizeSelected &&
-                                                                      state.size ==
-                                                                          size
-                                                                  ? AppColors
-                                                                      .white
-                                                                  : AppColors
-                                                                      .black45,
-                                                        ),
-                                                      ),
+                                                              ? AppColors.white
+                                                              : AppColors.black45,
                                                     ),
                                                   ),
                                                 ),
                                               ),
-                                            )
-                                            .toList(),
-                                  );
-                                },
-                              ),
-                              const SizedBox(height: 16),
-                              Text(
-                                'Description',
-                                style: Theme.of(context).textTheme.titleMedium!
-                                    .copyWith(fontWeight: FontWeight.bold),
-                              ),
-                              const SizedBox(height: 8.0),
-                              Text(
-                                product.description,
-                                style: Theme.of(context).textTheme.labelMedium!
-                                    .copyWith(color: AppColors.black45),
-                              ),
-                              const Spacer(),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text.rich(
+                                            ),
+                                          ),
+                                        )
+                                        .toList(),
+                              );
+                            },
+                          ),
+                          const SizedBox(height: 16),
+                          Text(
+                            'Description',
+                            style: Theme.of(context).textTheme.titleMedium!
+                                .copyWith(fontWeight: FontWeight.bold),
+                          ),
+                          const SizedBox(height: 8.0),
+                          Text(
+                            product.description,
+                            style: Theme.of(context).textTheme.labelMedium!
+                                .copyWith(color: AppColors.black45),
+                          ),
+                          const Spacer(),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text.rich(
+                                TextSpan(
+                                  text: '\$',
+                                  style: Theme.of(
+                                    context,
+                                  ).textTheme.titleLarge!.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    color: Theme.of(context).primaryColor,
+                                  ),
+                                  children: [
                                     TextSpan(
-                                      text: '\$',
+                                      text: product.price.toString(),
                                       style: Theme.of(
                                         context,
                                       ).textTheme.titleLarge!.copyWith(
                                         fontWeight: FontWeight.bold,
-                                        color: Theme.of(context).primaryColor,
                                       ),
-                                      children: [
-                                        TextSpan(
-                                          text: product.price.toString(),
-                                          style: Theme.of(
-                                            context,
-                                          ).textTheme.titleLarge!.copyWith(
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ],
                                     ),
-                                  ),
-                                  ElevatedButton.icon(
-                                    onPressed: () {},
+                                  ],
+                                ),
+                              ),
+                              BlocBuilder<
+                                ProductDetailsCubit,
+                                ProductDetailsState
+                              >(
+                                bloc: cubit,
+                                buildWhen:
+                                    (previous, current) =>
+                                        current is ProductAddedToCart ||
+                                        current is ProductAddingToCart,
+                                builder: (context, state) {
+                                  if (state is ProductAddingToCart) {
+                                    return ElevatedButton(
+                                      onPressed: null,
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: AppColors.primary,
+                                        foregroundColor: AppColors.white,
+                                      ),
+                                      child:
+                                          const CircularProgressIndicator.adaptive(),
+                                    );
+                                  } else if (state is ProductAddedToCart) {
+                                    return ElevatedButton(
+                                      onPressed: null,
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: AppColors.primary,
+                                        foregroundColor: AppColors.white,
+                                      ),
+                                      child: const Text('Added To Cart'),
+                                    );
+                                  }
+                                  return ElevatedButton.icon(
+                                    onPressed: () {
+                                      if (cubit.state is SizeSelected) {
+                                        cubit.addToCart(product.id);
+                                      } else {
+                                        ScaffoldMessenger.of(
+                                          context,
+                                        ).showSnackBar(
+                                          const SnackBar(
+                                            content: Text(
+                                              'Please select a size!',
+                                            ),
+                                          ),
+                                        );
+                                      }
+                                    },
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: AppColors.primary,
                                       foregroundColor: AppColors.white,
@@ -275,25 +301,25 @@ class ProductDetailsPage extends StatelessWidget {
                                       Icons.shopping_bag_outlined,
                                       color: AppColors.white,
                                     ),
-                                  ),
-                                ],
+                                  );
+                                },
                               ),
                             ],
                           ),
-                        ),
+                        ],
                       ),
                     ),
-                  ],
+                  ),
                 ),
-              );
-            } else {
-              return const Scaffold(
-                body: Center(child: Text('Something went wrong!')),
-              );
-            }
-          },
-        ),
-      ),
+              ],
+            ),
+          );
+        } else {
+          return const Scaffold(
+            body: Center(child: Text('Something went wrong!')),
+          );
+        }
+      },
     );
   }
 }

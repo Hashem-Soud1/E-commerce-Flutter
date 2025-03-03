@@ -9,8 +9,6 @@ class ProductItemModel {
   final bool isFavorite;
   final String category;
   final double averageRate;
-  final int quantity;
-  final ProductSize? size;
 
   ProductItemModel({
     required this.id,
@@ -21,8 +19,6 @@ class ProductItemModel {
     this.isFavorite = false,
     required this.category,
     this.averageRate = 4.5,
-    this.quantity = 1,
-    this.size,
   });
 
   ProductItemModel copyWith({
@@ -46,8 +42,6 @@ class ProductItemModel {
       isFavorite: isFavorite ?? this.isFavorite,
       category: category ?? this.category,
       averageRate: averageRate ?? this.averageRate,
-      quantity: quantity ?? this.quantity,
-      size: size ?? this.size,
     );
   }
 }

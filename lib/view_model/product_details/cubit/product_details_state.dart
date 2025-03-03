@@ -21,6 +21,13 @@ final class SizeSelected extends ProductDetailsState {
   SizeSelected({required this.size});
 }
 
+final class ProductAddingToCart extends ProductDetailsState {}
+
+final class ProductAddedToCart extends ProductDetailsState {
+  final String productId;
+  ProductAddedToCart({required this.productId});
+}
+
 final class ProductDetailsError extends ProductDetailsState {
   final String message;
   ProductDetailsError(this.message);
