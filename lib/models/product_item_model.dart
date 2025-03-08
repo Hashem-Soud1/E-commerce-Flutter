@@ -1,3 +1,5 @@
+enum ProductSize { S, M, L, XL }
+
 class ProductItemModel {
   final String id;
   final String name;
@@ -6,6 +8,7 @@ class ProductItemModel {
   final double price;
   final bool isFavorite;
   final String category;
+  final double averageRate;
 
   ProductItemModel({
     required this.id,
@@ -15,7 +18,32 @@ class ProductItemModel {
     required this.price,
     this.isFavorite = false,
     required this.category,
+    this.averageRate = 4.5,
   });
+
+  ProductItemModel copyWith({
+    String? id,
+    String? name,
+    String? imgUrl,
+    String? description,
+    double? price,
+    bool? isFavorite,
+    String? category,
+    double? averageRate,
+    int? quantity,
+    ProductSize? size,
+  }) {
+    return ProductItemModel(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      imgUrl: imgUrl ?? this.imgUrl,
+      description: description ?? this.description,
+      price: price ?? this.price,
+      isFavorite: isFavorite ?? this.isFavorite,
+      category: category ?? this.category,
+      averageRate: averageRate ?? this.averageRate,
+    );
+  }
 }
 
 List<ProductItemModel> dummyProducts = [

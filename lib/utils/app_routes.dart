@@ -1,4 +1,5 @@
 class AppRoutes {
-  static const HOME = '/';
-  static const PRODUCT_DETAIL = '/product-detailse';
+  static const String HOME = '/';
+  static const String PRODUCT_DETAIL = '/product-detailse';
+  static const String checkoutRoute = '/checkout';
 }

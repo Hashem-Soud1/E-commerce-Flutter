@@ -1,27 +1,37 @@
+import 'package:ecommerce_app/view_model/cart_state/cubit/cart_cubit.dart';
 import 'package:ecommerce_app/viwes/pages/favarite_page.dart';
 import 'package:ecommerce_app/viwes/pages/home_page.dart';
-import 'package:ecommerce_app/viwes/pages/order_page.dart';
+import 'package:ecommerce_app/viwes/pages/cart_page.dart';
 import 'package:ecommerce_app/viwes/pages/profile_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 
-class CustomBottomNavbar extends StatelessWidget {
+class CustomBottomNavbar extends StatefulWidget {
   const CustomBottomNavbar({super.key});
 
   @override
+  State<CustomBottomNavbar> createState() => _CustomBottomNavbarState();
+}
+
+class _CustomBottomNavbarState extends State<CustomBottomNavbar> {
+  @override
   Widget build(BuildContext context) {
     return PersistentTabView(
+      stateManagement: false,
       tabs: [
         PersistentTabConfig(
           screen: HomePage(),
           item: ItemConfig(icon: Icon(Icons.home_outlined), title: "Home"),
         ),
         PersistentTabConfig(
-          screen: OrderPage(),
-          item: ItemConfig(
-            icon: Icon(Icons.local_shipping_outlined),
-            title: "My Orders",
+          screen: BlocProvider(
+            create: (context) {
+              return CartCubit()..getCartItems();
+            },
+            child: CartPage(),
           ),
+          item: ItemConfig(icon: Icon(Icons.shopping_cart), title: "Carts"),
         ),
         PersistentTabConfig(
           screen: FavaritePage(),

@@ -1,4 +1,3 @@
-import 'package:ecommerce_app/models/category_model.dart';
 import 'package:ecommerce_app/view_model/category_state/cubit/category_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
