@@ -1,4 +1,3 @@
-import 'package:ecommerce_app/models/add_cart_itme_model.dart';
 import 'package:ecommerce_app/utils/app_colores.dart';
 import 'package:ecommerce_app/utils/app_routes.dart';
 import 'package:ecommerce_app/view_model/cart_state/cubit/cart_cubit.dart';
@@ -12,7 +11,6 @@ class CartPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint(dummyCart.toString());
     return BlocProvider(
       create: (context) {
         final cubit = CartCubit();
