@@ -106,7 +106,7 @@ class CheckoutPage extends StatelessWidget {
                                                       .textTheme
                                                       .titleMedium!
                                                       .copyWith(
-                                                        color: AppColors.grey,
+                                                        color: AppColors.grey1,
                                                       ),
                                                   children: [
                                                     TextSpan(
@@ -147,7 +147,7 @@ class CheckoutPage extends StatelessWidget {
                               title: 'Add Payment Method',
                             ),
                             const SizedBox(height: 16.0),
-                            Divider(color: AppColors.grey2),
+                            Divider(color: AppColors.grey),
                             const SizedBox(height: 16.0),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,

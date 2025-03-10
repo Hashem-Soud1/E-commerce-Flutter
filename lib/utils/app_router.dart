@@ -1,5 +1,6 @@
 import 'package:ecommerce_app/utils/app_routes.dart';
 import 'package:ecommerce_app/view_model/product_details/cubit/product_details_cubit.dart';
+import 'package:ecommerce_app/viwes/pages/add_new_card_page.dart';
 import 'package:ecommerce_app/viwes/pages/checkout_page.dart';
 import 'package:ecommerce_app/viwes/pages/custom_bottom_navbar.dart';
 import 'package:ecommerce_app/viwes/pages/product_details_page.dart';
@@ -26,6 +27,12 @@ class AppRouter {
       case AppRoutes.checkoutRoute:
         return MaterialPageRoute(
           builder: (_) => const CheckoutPage(),
+          settings: settings,
+        );
+
+      case AppRoutes.addNewCardRoute:
+        return MaterialPageRoute(
+          builder: (_) => const AddNewCardPage(),
           settings: settings,
         );
 
