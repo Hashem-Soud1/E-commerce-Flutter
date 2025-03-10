@@ -16,6 +16,8 @@ class _AddNewCardPageState extends State<AddNewCardPage> {
   final TextEditingController _expiryDateController = TextEditingController();
   final TextEditingController _cvvController = TextEditingController();
 
+  final _formkey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,50 +25,55 @@ class _AddNewCardPageState extends State<AddNewCardPage> {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(24.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              LabelWithTextFieldNewCard(
-                label: 'Card Number',
-                controller: _cardNumberController,
-                icon: Icons.credit_card,
-                hintText: 'Enter card number',
-              ),
-              const SizedBox(height: 20),
-              LabelWithTextFieldNewCard(
-                label: 'Card Holder Name',
-                controller: _cardHolderNameController,
-                icon: Icons.person,
-                hintText: 'Enter card holder name',
-              ),
-              const SizedBox(height: 20),
-              LabelWithTextFieldNewCard(
-                label: 'Expiry Date',
-                controller: _expiryDateController,
-                icon: Icons.date_range,
-                hintText: 'Enter expiry date',
-              ),
-              const SizedBox(height: 20),
-              LabelWithTextFieldNewCard(
-                label: 'CVV',
-                controller: _cvvController,
-                icon: Icons.password,
-                hintText: 'Enter cvv',
-              ),
-              const Spacer(),
-              SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary,
-                    foregroundColor: AppColors.white,
-                  ),
-                  child: const Text('Add Card'),
+          child: Form(
+            key: _formkey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                LabelWithTextFieldNewCard(
+                  label: 'Card Number',
+                  controller: _cardNumberController,
+                  icon: Icons.credit_card,
+                  hintText: 'Enter card number',
                 ),
-              ),
-            ],
+                const SizedBox(height: 20),
+                LabelWithTextFieldNewCard(
+                  label: 'Card Holder Name',
+                  controller: _cardHolderNameController,
+                  icon: Icons.person,
+                  hintText: 'Enter card holder name',
+                ),
+                const SizedBox(height: 20),
+                LabelWithTextFieldNewCard(
+                  label: 'Expiry Date',
+                  controller: _expiryDateController,
+                  icon: Icons.date_range,
+                  hintText: 'Enter expiry date',
+                ),
+                const SizedBox(height: 20),
+                LabelWithTextFieldNewCard(
+                  label: 'CVV',
+                  controller: _cvvController,
+                  icon: Icons.password,
+                  hintText: 'Enter cvv',
+                ),
+                const Spacer(),
+                SizedBox(
+                  width: double.infinity,
+                  height: 50,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      _formkey.currentState!.validate();
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.primary,
+                      foregroundColor: AppColors.white,
+                    ),
+                    child: const Text('Add Card'),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

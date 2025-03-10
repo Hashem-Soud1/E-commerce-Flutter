@@ -13,5 +13,7 @@ class AppColors {
   static const Color primary = Colors.deepPurple;
   static const Color orange = Colors.orange;
   static const Color yellow = Colors.yellow;
+  static const Color red = Colors.red;
+
   static const Color black45 = Colors.black45;
 }
