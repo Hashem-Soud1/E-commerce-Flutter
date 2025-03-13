@@ -1,6 +1,8 @@
 import 'package:ecommerce_app/utils/app_colores.dart';
 import 'package:ecommerce_app/utils/app_routes.dart';
+import 'package:ecommerce_app/view_model/checkout_state/checkout_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class EmptyShippingAndPayment extends StatelessWidget {
   final String title;
@@ -8,9 +10,12 @@ class EmptyShippingAndPayment extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final checkoutCubit = BlocProvider.of<CheckoutCubit>(context);
     return InkWell(
       onTap: () {
-        Navigator.pushNamed(context, AppRoutes.addNewCardRoute);
+        Navigator.pushNamed(context, AppRoutes.addNewCardRoute).then((value) {
+          checkoutCubit.getCartItems();
+        });
       },
       child: Container(
         width: double.infinity,

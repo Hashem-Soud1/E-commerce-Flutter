@@ -1,6 +1,9 @@
+import 'package:ecommerce_app/models/add_new_card_model.dart';
 import 'package:ecommerce_app/utils/app_colores.dart';
+import 'package:ecommerce_app/view_model/add_new_card_cudit/add_new_card_cubit.dart';
 import 'package:ecommerce_app/viwes/widgets/label_with_textfield_new_card.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AddNewCardPage extends StatefulWidget {
   const AddNewCardPage({super.key});
@@ -20,6 +23,7 @@ class _AddNewCardPageState extends State<AddNewCardPage> {
 
   @override
   Widget build(BuildContext context) {
+    final cubit = BlocProvider.of<AddNewCardCubit>(context);
     return Scaffold(
       appBar: AppBar(title: const Text('Add New Card')),
       body: SafeArea(
@@ -61,15 +65,59 @@ class _AddNewCardPageState extends State<AddNewCardPage> {
                 SizedBox(
                   width: double.infinity,
                   height: 50,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      _formkey.currentState!.validate();
+                  child: BlocConsumer<AddNewCardCubit, AddNewCardState>(
+                    bloc: cubit,
+
+                    listenWhen:
+                        (previous, current) =>
+                            current is AddNewCardLoded ||
+                            current is AddNewCardError,
+                    listener: (context, state) {
+                      if (state is AddNewCardLoded) {
+                        Navigator.pop(context);
+                      }
+                      if (state is AddNewCardError) {
+                        ScaffoldMessenger.of(
+                          context,
+                        ).showSnackBar(SnackBar(content: Text(state.message)));
+                      }
                     },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primary,
-                      foregroundColor: AppColors.white,
-                    ),
-                    child: const Text('Add Card'),
+                    buildWhen:
+                        (previous, current) =>
+                            current is AddNewCardLoading ||
+                            current is AddNewCardError ||
+                            current is AddNewCardLoded,
+                    builder: (context, state) {
+                      if (state is AddNewCardLoading) {
+                        ElevatedButton(
+                          onPressed: null,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.primary,
+                            foregroundColor: AppColors.white,
+                          ),
+                          child: const CircularProgressIndicator.adaptive(),
+                        );
+                      }
+
+                      return ElevatedButton(
+                        onPressed: () {
+                          cubit.addNewCard(
+                            PaymentCardModel(
+                              id: DateTime.now().toIso8601String(),
+                              cardNumber: _cardNumberController.text,
+                              cardHolderName: _cardHolderNameController.text,
+                              expiryDate: _expiryDateController.text,
+                              cvvCode: _cvvController.text,
+                            ),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.primary,
+                          foregroundColor: AppColors.white,
+                        ),
+                        child: const Text('Add Card'),
+                      );
+                    },
                   ),
                 ),
               ],
