@@ -22,7 +22,7 @@ List<CategoryModel> dummyCategories = [
     id: '1',
     name: 'New Arrivals',
     productsCount: 208,
-    bgColor: AppColors.grey,
+    bgColor: AppColors.grey1,
     textColor: AppColors.black,
   ),
   CategoryModel(

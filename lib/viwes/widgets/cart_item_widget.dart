@@ -43,7 +43,7 @@ class CartItemWidget extends StatelessWidget {
                     text: 'Size: ',
                     style: Theme.of(
                       context,
-                    ).textTheme.titleMedium!.copyWith(color: AppColors.grey),
+                    ).textTheme.titleMedium!.copyWith(color: AppColors.grey3),
                     children: [
                       TextSpan(
                         text: cartItem.size.name,
