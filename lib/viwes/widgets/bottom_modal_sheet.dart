@@ -52,6 +52,11 @@ class CustomBottomModalSheet extends StatelessWidget {
                         return Card(
                           elevation: 0,
                           child: ListTile(
+                            onTap: () {
+                              paymentMethodsCubit.changePaymentMethod(
+                                paymentCard.id,
+                              );
+                            },
                             leading: DecoratedBox(
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(8),
@@ -73,6 +78,29 @@ class CustomBottomModalSheet extends StatelessWidget {
                             ),
                             title: Text(paymentCard.cardNumber),
                             subtitle: Text(paymentCard.cardHolderName),
+                            trailing:
+                                BlocBuilder<AddNewCardCubit, AddNewCardState>(
+                                  bloc: paymentMethodsCubit,
+                                  buildWhen:
+                                      (previous, current) =>
+                                          current is PaymentCardChosenLoded,
+                                  builder: (context, state) {
+                                    if (state is PaymentCardChosenLoded) {
+                                      final chosenPaymentMethod =
+                                          state.paymentCardChosen;
+                                      return Radio<String>(
+                                        value: paymentCard.id,
+                                        groupValue: chosenPaymentMethod.id,
+                                        onChanged: (id) {
+                                          paymentMethodsCubit
+                                              .changePaymentMethod(id!);
+                                        },
+                                      );
+                                    } else {
+                                      return const SizedBox();
+                                    }
+                                  },
+                                ),
                           ),
                         );
                       },
@@ -107,7 +135,32 @@ class CustomBottomModalSheet extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 24),
-              MainButton(text: 'Confirm Payemnt', onTap: () {}),
+              BlocConsumer<AddNewCardCubit, AddNewCardState>(
+                bloc: paymentMethodsCubit,
+                listenWhen:
+                    (previous, current) => current is ConfirmPaymentMethodLoded,
+                buildWhen:
+                    (previous, current) =>
+                        current is ConfirmPaymentMethodError ||
+                        current is ConfirmPaymentMethodLoading ||
+                        current is ConfirmPaymentMethodLoded,
+                listener: (context, state) {
+                  if (state is ConfirmPaymentMethodLoded) {
+                    Navigator.of(context).pop();
+                  }
+                },
+                builder: (context, state) {
+                  if (state is ConfirmPaymentMethodLoading) {
+                    return MainButton(isLoading: true, onTap: null);
+                  }
+                  return MainButton(
+                    text: 'Confirm Payemnt',
+                    onTap: () {
+                      paymentMethodsCubit.confirmPaymentMethod();
+                    },
+                  );
+                },
+              ),
             ],
           ),
         ),

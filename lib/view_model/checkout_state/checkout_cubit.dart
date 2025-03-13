@@ -20,14 +20,17 @@ class CheckoutCubit extends Cubit<CheckoutState> {
       (previousValue, element) => previousValue + element.quantity,
     );
 
-    final firstCardChoosen =
-        dummyPaymentCards.isEmpty ? null : dummyPaymentCards.first;
+    final chosenPaymentCard = dummyPaymentCards.firstWhere(
+      (element) => element.isChosen == true,
+      orElse: () => dummyPaymentCards.first,
+    );
+
     emit(
       CheckoutLoaded(
         cartItems: cartItems,
         totalAmount: subtotal + 10,
         numOfProducts: numOfProducts,
-        firtsCardChoosen: firstCardChoosen,
+        firtsCardChoosen: chosenPaymentCard,
       ),
     );
   }

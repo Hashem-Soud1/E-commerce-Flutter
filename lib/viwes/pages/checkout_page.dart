@@ -30,12 +30,14 @@ class CheckoutPage extends StatelessWidget {
                 height: MediaQuery.of(context).size.height * 0.6,
                 child: BlocProvider(
                   create: (context) {
-                    return AddNewCardCubit()..getPaymentCards();
+                    return AddNewCardCubit()..fetchPaymentMethods();
                   },
                   child: const CustomBottomModalSheet(),
                 ),
               );
             },
+          ).then(
+            (onValue) => BlocProvider.of<CheckoutCubit>(context).getCartItems(),
           );
         },
       );
