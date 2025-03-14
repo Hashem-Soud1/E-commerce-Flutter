@@ -15,6 +15,4 @@ class LocationItemModel {
 
 List<LocationItemModel> dummyLocations = [
   LocationItemModel(id: '1', city: 'Cairo', country: 'Egypt'),
-  LocationItemModel(id: '2', city: 'Giza', country: 'Egypt'),
-  LocationItemModel(id: '3', city: 'Alexandria', country: 'Egypt'),
 ];
