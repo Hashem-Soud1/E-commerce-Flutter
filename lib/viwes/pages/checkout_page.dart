@@ -42,7 +42,10 @@ class CheckoutPage extends StatelessWidget {
         },
       );
     } else {
-      return const EmptyShippingAndPayment(title: 'Add Payment Method');
+      return const EmptyShippingAndPayment(
+        title: 'Add Payment Method',
+        isPayment: true,
+      );
     }
   }
 
@@ -90,6 +93,7 @@ class CheckoutPage extends StatelessWidget {
                             const SizedBox(height: 16.0),
                             const EmptyShippingAndPayment(
                               title: 'Add shipping address',
+                              isPayment: false,
                             ),
                             const SizedBox(height: 16.0),
                             CheckoutHeadlinesItem(
