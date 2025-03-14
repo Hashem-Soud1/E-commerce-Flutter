@@ -1,5 +1,6 @@
 import 'package:ecommerce_app/utils/app_routes.dart';
 import 'package:ecommerce_app/view_model/add_new_card_cudit/add_new_card_cubit.dart';
+import 'package:ecommerce_app/view_model/location_page_cubit/location_page_cubit.dart';
 import 'package:ecommerce_app/view_model/product_details/cubit/product_details_cubit.dart';
 import 'package:ecommerce_app/viwes/pages/add_new_card_page.dart';
 import 'package:ecommerce_app/viwes/pages/checkout_page.dart';
@@ -34,7 +35,13 @@ class AppRouter {
 
       case AppRoutes.locationRoute:
         return MaterialPageRoute(
-          builder: (_) => const ChooseLocationPage(),
+          builder:
+              (_) => BlocProvider(
+                create: (context) {
+                  return ChooseLocationCubit()..fetchLocations();
+                },
+                child: const ChooseLocationPage(),
+              ),
           settings: settings,
         );
 

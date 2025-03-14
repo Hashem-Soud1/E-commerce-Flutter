@@ -29,4 +29,20 @@ class AddToCartModel {
   }
 }
 
-List<AddToCartModel> dummyCart = [];
+List<AddToCartModel> dummyCart = [
+  AddToCartModel(
+    id: '1',
+    size: ProductSize.S,
+    quantity: 1,
+    product: ProductItemModel(
+      id: '1',
+      name: 'Nike Air Max 270',
+      price: 150,
+      description:
+          'The Nike Air Max 270 delivers visible air under every step. Updated for modern comfort, it nods to the original 1991 Air Max 180 with its exaggerated tongue top and heritage tongue logo.',
+      category: 'shoes',
+      imgUrl:
+          'https://www.pngall.com/wp-content/uploads/2016/09/Trouser-Free-Download-PNG.png',
+    ),
+  ),
+];
