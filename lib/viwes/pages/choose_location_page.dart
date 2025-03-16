@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ecommerce_app/utils/app_colores.dart';
 import 'package:ecommerce_app/view_model/location_page_cubit/location_page_cubit.dart';
 import 'package:ecommerce_app/viwes/widgets/location_item.dart';

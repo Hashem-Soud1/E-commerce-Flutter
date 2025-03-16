@@ -1,4 +1,3 @@
-import 'package:ecommerce_app/view_model/checkout_state/checkout_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ecommerce_app/models/location_item_model.dart';
 
