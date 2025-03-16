@@ -6,7 +6,9 @@ import 'package:ecommerce_app/viwes/pages/add_new_card_page.dart';
 import 'package:ecommerce_app/viwes/pages/checkout_page.dart';
 import 'package:ecommerce_app/viwes/pages/choose_location_page.dart';
 import 'package:ecommerce_app/viwes/pages/custom_bottom_navbar.dart';
+import 'package:ecommerce_app/viwes/pages/login_page.dart';
 import 'package:ecommerce_app/viwes/pages/product_details_page.dart';
+import 'package:ecommerce_app/viwes/pages/regester_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -30,6 +32,18 @@ class AppRouter {
       case AppRoutes.checkoutRoute:
         return MaterialPageRoute(
           builder: (_) => const CheckoutPage(),
+          settings: settings,
+        );
+
+      case AppRoutes.LOGIN:
+        return MaterialPageRoute(
+          builder: (_) => const LoginPage(),
+          settings: settings,
+        );
+
+      case AppRoutes.REGISTER:
+        return MaterialPageRoute(
+          builder: (_) => const RegisterPage(),
           settings: settings,
         );
 

@@ -62,8 +62,8 @@ class CheckoutPage extends StatelessWidget {
             borderRadius: BorderRadius.circular(16),
             child: CachedNetworkImage(
               imageUrl: chosenAddress.imgUrl,
-              width: 140,
-              height: 100,
+              width: 90,
+              height: 90,
               fit: BoxFit.cover,
             ),
           ),
@@ -169,8 +169,8 @@ class CheckoutPage extends StatelessWidget {
                                       ),
                                       child: CachedNetworkImage(
                                         imageUrl: cartItem.product.imgUrl,
-                                        height: 125,
-                                        width: 125,
+                                        height: 100,
+                                        width: 100,
                                       ),
                                     ),
                                     const SizedBox(width: 16.0),

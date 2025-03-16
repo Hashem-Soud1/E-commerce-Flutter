@@ -39,34 +39,63 @@ class CartPage extends StatelessWidget {
                   return const Center(child: Text('No items in your cart!'));
                 }
                 return SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      const SizedBox(height: 16.0),
-                      ListView.separated(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: cartItems.length,
-                        itemBuilder: (context, index) {
-                          final cartItem = cartItems[index];
-                          return CartItemWidget(cartItem: cartItem);
-                        },
-                        separatorBuilder: (context, index) {
-                          return Divider(color: AppColors.grey2);
-                        },
-                      ),
-                      Divider(color: AppColors.grey2),
-                      BlocBuilder<CartCubit, CartState>(
-                        bloc: cubit,
-                        buildWhen:
-                            (previous, current) => current is SubtotalUpdated,
-                        builder: (context, subtotalState) {
-                          if (subtotalState is SubtotalUpdated) {
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 16.0),
+                        ListView.separated(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: cartItems.length,
+                          itemBuilder: (context, index) {
+                            final cartItem = cartItems[index];
+                            return CartItemWidget(cartItem: cartItem);
+                          },
+                          separatorBuilder: (context, index) {
+                            return Divider(color: AppColors.grey2);
+                          },
+                        ),
+                        Divider(color: AppColors.grey2),
+                        BlocBuilder<CartCubit, CartState>(
+                          bloc: cubit,
+                          buildWhen:
+                              (previous, current) => current is SubtotalUpdated,
+                          builder: (context, subtotalState) {
+                            if (subtotalState is SubtotalUpdated) {
+                              return Column(
+                                children: [
+                                  totalAndSubtotalWidget(
+                                    context,
+                                    title: 'Subtotal',
+                                    amount: subtotalState.subtotal,
+                                  ),
+                                  totalAndSubtotalWidget(
+                                    context,
+                                    title: 'Shipping',
+                                    amount: 10,
+                                  ),
+                                  const SizedBox(height: 4.0),
+                                  Dash(
+                                    dashColor: AppColors.grey2,
+                                    length:
+                                        MediaQuery.of(context).size.width - 32,
+                                  ),
+                                  const SizedBox(height: 4.0),
+                                  totalAndSubtotalWidget(
+                                    context,
+                                    title: 'Total Amount',
+                                    amount: subtotalState.subtotal + 10,
+                                  ),
+                                ],
+                              );
+                            }
                             return Column(
                               children: [
                                 totalAndSubtotalWidget(
                                   context,
                                   title: 'Subtotal',
-                                  amount: subtotalState.subtotal,
+                                  amount: state.subtotal,
                                 ),
                                 totalAndSubtotalWidget(
                                   context,
@@ -83,60 +112,35 @@ class CartPage extends StatelessWidget {
                                 totalAndSubtotalWidget(
                                   context,
                                   title: 'Total Amount',
-                                  amount: subtotalState.subtotal + 10,
+                                  amount: state.subtotal + 10,
                                 ),
                               ],
                             );
-                          }
-                          return Column(
-                            children: [
-                              totalAndSubtotalWidget(
-                                context,
-                                title: 'Subtotal',
-                                amount: state.subtotal,
+                          },
+                        ),
+                        const SizedBox(height: 40.0),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: SizedBox(
+                            width: double.infinity,
+                            height: 60,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                Navigator.of(
+                                  context,
+                                  rootNavigator: true,
+                                ).pushNamed(AppRoutes.checkoutRoute);
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Theme.of(context).primaryColor,
+                                foregroundColor: AppColors.white,
                               ),
-                              totalAndSubtotalWidget(
-                                context,
-                                title: 'Shipping',
-                                amount: 10,
-                              ),
-                              const SizedBox(height: 4.0),
-                              Dash(
-                                dashColor: AppColors.grey2,
-                                length: MediaQuery.of(context).size.width - 32,
-                              ),
-                              const SizedBox(height: 4.0),
-                              totalAndSubtotalWidget(
-                                context,
-                                title: 'Total Amount',
-                                amount: state.subtotal + 10,
-                              ),
-                            ],
-                          );
-                        },
-                      ),
-                      const SizedBox(height: 40.0),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                        child: SizedBox(
-                          width: double.infinity,
-                          height: 60,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              Navigator.of(
-                                context,
-                                rootNavigator: true,
-                              ).pushNamed(AppRoutes.checkoutRoute);
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Theme.of(context).primaryColor,
-                              foregroundColor: AppColors.white,
+                              child: const Text('Checkout'),
                             ),
-                            child: const Text('Checkout'),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 );
               } else if (state is CartError) {

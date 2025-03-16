@@ -1,26 +1,29 @@
 import 'package:ecommerce_app/utils/app_colores.dart';
 import 'package:flutter/material.dart';
 
-class LabelWithTextFieldNewCard extends StatefulWidget {
+class LabelWithTextField extends StatefulWidget {
   final String label;
   final TextEditingController controller;
-  final IconData icon;
+  final IconData prefixIcon;
+  final Widget? suffixIcon;
   final String hintText;
+  final bool obsecureText;
 
-  const LabelWithTextFieldNewCard({
+  const LabelWithTextField({
     super.key,
     required this.label,
     required this.controller,
-    required this.icon,
+    required this.prefixIcon,
     required this.hintText,
+    this.obsecureText = false,
+    this.suffixIcon,
   });
 
   @override
-  State<LabelWithTextFieldNewCard> createState() =>
-      _LabelWithTextFieldNewCardState();
+  State<LabelWithTextField> createState() => _LabelWithTextFieldState();
 }
 
-class _LabelWithTextFieldNewCardState extends State<LabelWithTextFieldNewCard> {
+class _LabelWithTextFieldState extends State<LabelWithTextField> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -38,7 +41,7 @@ class _LabelWithTextFieldNewCardState extends State<LabelWithTextFieldNewCard> {
           validator: (value) => value!.isEmpty ? 'Required' : null,
 
           decoration: InputDecoration(
-            prefixIcon: Icon(widget.icon),
+            prefixIcon: Icon(widget.prefixIcon),
             prefixIconColor: AppColors.grey,
             hintText: widget.hintText,
             fillColor: AppColors.grey1,
