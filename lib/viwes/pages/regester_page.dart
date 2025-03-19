@@ -1,9 +1,11 @@
 import 'package:ecommerce_app/utils/app_colores.dart';
 import 'package:ecommerce_app/utils/app_routes.dart';
+import 'package:ecommerce_app/view_model/auth_cubit/auth_cubit.dart';
 import 'package:ecommerce_app/viwes/widgets/label_with_textfield_new_card.dart';
 import 'package:ecommerce_app/viwes/widgets/main_button.dart';
 import 'package:ecommerce_app/viwes/widgets/socail_media_item.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -20,6 +22,8 @@ class _LoginPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
+    final cubit = BlocProvider.of<AuthCubit>(context);
+
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -69,13 +73,38 @@ class _LoginPageState extends State<RegisterPage> {
                       onPressed: () {},
                     ),
                   ),
-                  const SizedBox(height: 40),
-                  MainButton(
-                    text: 'Create Account',
-                    onTap: () {
-                      if (_formKey.currentState!.validate()) {
+                  BlocConsumer<AuthCubit, AuthState>(
+                    bloc: cubit,
+                    listenWhen:
+                        (previous, current) =>
+                            current is AuthSuccess || current is AuthFailure,
+                    listener: (context, state) {
+                      if (state is AuthSuccess) {
                         Navigator.of(context).pushNamed(AppRoutes.HOME);
+                      } else if (state is AuthFailure) {
+                        ScaffoldMessenger.of(
+                          context,
+                        ).showSnackBar(SnackBar(content: Text(state.message)));
                       }
+                    },
+                    buildWhen:
+                        (previous, current) =>
+                            current is AuthFailure || current is AuthFailure,
+                    builder: (context, state) {
+                      if (state is AuthLoading) {
+                        return MainButton(isLoading: true);
+                      }
+                      return MainButton(
+                        text: 'Create Account',
+                        onTap: () async {
+                          if (_formKey.currentState!.validate()) {
+                            await cubit.registerWithEmailandPassword(
+                              emailController.text,
+                              passwordController.text,
+                            );
+                          }
+                        },
+                      );
                     },
                   ),
                   const SizedBox(height: 8),
