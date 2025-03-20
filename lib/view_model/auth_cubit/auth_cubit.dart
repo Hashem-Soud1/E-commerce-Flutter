@@ -11,7 +11,7 @@ class AuthCubit extends Cubit<AuthState> {
   Future<void> loginWithEmailandPassword(String email, String password) async {
     emit(AuthLoading());
     try {
-      final result = await _authServices.loginWithEmailandPassword(
+      final result = await _authServices.signInWithEmailandPassword(
         email,
         password,
       );
@@ -59,6 +59,20 @@ class AuthCubit extends Cubit<AuthState> {
       emit(AuthSignedOut());
     } catch (e) {
       emit(AuthSignOutFailure(e.toString()));
+    }
+  }
+
+  Future<void> signInWithGoogle() async {
+    emit(AuthGoogleSignInLoading());
+    try {
+      final result = await _authServices.signInWtihGoogle();
+      if (result) {
+        emit(AuthGoogleSignInSuccess());
+      } else {
+        emit(AuthGoogleSignInFailure('Sign in with google failed'));
+      }
+    } catch (e) {
+      emit(AuthGoogleSignInFailure(e.toString()));
     }
   }
 }

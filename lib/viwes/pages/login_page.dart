@@ -85,9 +85,7 @@ class _LoginPageState extends State<LoginPage> {
                         ).showSnackBar(SnackBar(content: Text(state.message)));
                       }
                     },
-                    buildWhen:
-                        (previous, current) =>
-                            current is AuthFailure || current is AuthFailure,
+                    buildWhen: (previous, current) => current is AuthLoading,
                     builder: (context, state) {
                       if (state is AuthLoading) {
                         return MainButton(isLoading: true);
@@ -122,11 +120,37 @@ class _LoginPageState extends State<LoginPage> {
                               .copyWith(color: AppColors.grey),
                         ),
                         const SizedBox(height: 14),
-                        SocialMediaButton(
-                          text: 'Login with Google',
-                          imgUrl:
-                              'https://cdn1.iconfinder.com/data/icons/google-s-logo/150/Google_Icons-09-512.png',
-                          onTap: () {},
+                        BlocConsumer<AuthCubit, AuthState>(
+                          bloc: cubit,
+                          listenWhen:
+                              (previous, current) =>
+                                  current is AuthGoogleSignInSuccess ||
+                                  current is AuthGoogleSignInFailure,
+                          listener: (context, state) {
+                            if (state is AuthGoogleSignInSuccess) {
+                              Navigator.of(context).pushNamed(AppRoutes.HOME);
+                            } else if (state is AuthGoogleSignInFailure) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text(state.message)),
+                              );
+                            }
+                          },
+                          buildWhen:
+                              (previous, current) =>
+                                  current is AuthGoogleSignInLoading,
+                          builder: (context, state) {
+                            if (state is AuthGoogleSignInLoading) {
+                              return MainButton(isLoading: true);
+                            }
+                            return SocialMediaButton(
+                              text: 'Login with Google',
+                              imgUrl:
+                                  'https://cdn1.iconfinder.com/data/icons/google-s-logo/150/Google_Icons-09-512.png',
+                              onTap: () {
+                                cubit.signInWithGoogle();
+                              },
+                            );
+                          },
                         ),
                         const SizedBox(height: 16),
                         SocialMediaButton(

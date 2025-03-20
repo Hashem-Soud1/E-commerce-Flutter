@@ -27,3 +27,15 @@ final class AuthSignOutFailure extends AuthState {
 
   AuthSignOutFailure(this.message);
 }
+
+final class AuthGoogleSignInLoading extends AuthState {
+  AuthGoogleSignInLoading();
+}
+
+final class AuthGoogleSignInSuccess extends AuthState {}
+
+final class AuthGoogleSignInFailure extends AuthState {
+  final String message;
+
+  AuthGoogleSignInFailure(this.message);
+}

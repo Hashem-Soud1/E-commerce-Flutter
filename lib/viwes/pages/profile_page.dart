@@ -24,6 +24,7 @@ class ProfilePage extends StatelessWidget {
             if (state is AuthSignedOut) {
               Navigator.of(
                 context,
+                rootNavigator: true,
               ).pushNamedAndRemoveUntil(AppRoutes.LOGIN, (route) => false);
             } else if (state is AuthSignOutFailure) {
               ScaffoldMessenger.of(
