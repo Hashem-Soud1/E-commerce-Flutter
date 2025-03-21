@@ -1,3 +1,6 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:convert';
+
 enum ProductSize { S, M, L, XL }
 
 class ProductItemModel {
@@ -42,6 +45,35 @@ class ProductItemModel {
       isFavorite: isFavorite ?? this.isFavorite,
       category: category ?? this.category,
       averageRate: averageRate ?? this.averageRate,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'id': id,
+      'name': name,
+      'imgUrl': imgUrl,
+      'description': description,
+      'price': price,
+      'isFavorite': isFavorite,
+      'category': category,
+      'averageRate': averageRate,
+    };
+  }
+
+  factory ProductItemModel.fromMap(
+    Map<String, dynamic> map,
+    String documentID,
+  ) {
+    return ProductItemModel(
+      id: documentID,
+      name: map['name'] as String,
+      imgUrl: map['imgUrl'] as String,
+      description: map['description'] ?? '',
+      price: map['price']?.toDouble() ?? 0.0,
+      isFavorite: map['isFavorite'] ?? false,
+      category: map['category'] as String,
+      averageRate: map['averageRate']?.toDouble() ?? 0.0,
     );
   }
 }
