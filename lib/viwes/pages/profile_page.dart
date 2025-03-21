@@ -38,7 +38,7 @@ class ProfilePage extends StatelessWidget {
               return MainButton(isLoading: true);
             }
             return MainButton(
-              onTap: () async => await cubit.SignOut(),
+              onTap: () async => await cubit.signOut(),
               text: 'SignOut',
             );
           },

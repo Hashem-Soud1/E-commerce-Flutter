@@ -101,6 +101,7 @@ class _LoginPageState extends State<RegisterPage> {
                             await cubit.registerWithEmailandPassword(
                               emailController.text,
                               passwordController.text,
+                              usernameController.text,
                             );
                           }
                         },
