@@ -1,4 +1,5 @@
 import 'package:ecommerce_app/models/add_cart_itme_model.dart';
+import 'package:ecommerce_app/services/product_details_services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ecommerce_app/models/product_item_model.dart';
 
@@ -10,16 +11,18 @@ class ProductDetailsCubit extends Cubit<ProductDetailsState> {
   ProductSize selectedSize = ProductSize.M;
   int quantity = 1;
 
-  void fetchProductDetails(String productId) {
+  final _productDetailsServices = ProductDetailsServicesImpl();
+
+  void fetchProductDetails(String productId) async {
     emit(ProductDetailsLoading());
-
-    Future.delayed(Duration(seconds: 1), () {
-      final product = dummyProducts.firstWhere(
-        (element) => element.id == productId,
+    try {
+      final selectedProduct = await _productDetailsServices.fetchProductDetails(
+        productId,
       );
-
-      emit(ProductDetailsLoaded(product));
-    });
+      emit(ProductDetailsLoaded(selectedProduct));
+    } catch (e) {
+      emit(ProductDetailsError(e.toString()));
+    }
   }
 
   void incrementCounter(String productId) {
