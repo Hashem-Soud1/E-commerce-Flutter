@@ -1,4 +1,5 @@
 import 'package:ecommerce_app/models/add_cart_itme_model.dart';
+import 'package:ecommerce_app/services/firebase_auth_service.dart';
 import 'package:ecommerce_app/services/product_details_services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ecommerce_app/models/product_item_model.dart';
@@ -12,6 +13,7 @@ class ProductDetailsCubit extends Cubit<ProductDetailsState> {
   int quantity = 1;
 
   final _productDetailsServices = ProductDetailsServicesImpl();
+  final _authServices = AuthServicesImpl();
 
   void fetchProductDetails(String productId) async {
     emit(ProductDetailsLoading());
@@ -42,18 +44,28 @@ class ProductDetailsCubit extends Cubit<ProductDetailsState> {
     emit(SizeSelected(size: selectedSize));
   }
 
-  void addToCart(String productId) {
+  Future<void> addToCart(String productId) async {
     emit(ProductAddingToCart());
-    final cartItem = AddToCartModel(
-      product: dummyProducts.firstWhere((item) => item.id == productId),
-      id: DateTime.now().toIso8601String(),
-      size: selectedSize,
-      quantity: quantity,
-    );
 
-    dummyCart.add(cartItem);
-    Future.delayed(const Duration(seconds: 1), () {
+    try {
+      final selectedItem = await _productDetailsServices.fetchProductDetails(
+        productId,
+      );
+
+      final cartItem = AddToCartModel(
+        product: selectedItem,
+        id: DateTime.now().toIso8601String(),
+        quantity: quantity,
+        size: selectedSize,
+      );
+
+      final userId = _authServices.getCurrentUser()!.uid;
+
+      await _productDetailsServices.addToCart(cartItem, userId);
+
       emit(ProductAddedToCart(productId: productId));
-    });
+    } catch (e) {
+      emit(ProductAddToCartError(e.toString()));
+    }
   }
 }

@@ -1,3 +1,6 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:convert';
+
 import 'package:ecommerce_app/models/product_item_model.dart';
 
 class AddToCartModel {
@@ -25,6 +28,24 @@ class AddToCartModel {
       product: product ?? this.product,
       size: size ?? this.size,
       quantity: quantity ?? this.quantity,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'id': id,
+      'size': size.name,
+      'product': product.toMap(),
+      'quantity': quantity,
+    };
+  }
+
+  factory AddToCartModel.fromMap(Map<String, dynamic> map) {
+    return AddToCartModel(
+      id: map['id'] as String,
+      size: ProductSize.fromMap(map['size']),
+      product: ProductItemModel.fromMap(map['product'] as Map<String, dynamic>),
+      quantity: map['quantity'] as int,
     );
   }
 }

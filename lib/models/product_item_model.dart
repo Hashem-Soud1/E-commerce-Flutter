@@ -1,7 +1,24 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:convert';
+enum ProductSize {
+  S,
+  M,
+  L,
+  XL;
 
-enum ProductSize { S, M, L, XL }
+  static ProductSize fromMap(String size) {
+    switch (size.toUpperCase()) {
+      case 'S':
+        return ProductSize.S;
+      case 'M':
+        return ProductSize.M;
+      case 'L':
+        return ProductSize.L;
+      case 'XL':
+        return ProductSize.XL;
+      default:
+        return ProductSize.S;
+    }
+  }
+}
 
 class ProductItemModel {
   final String id;
@@ -61,18 +78,15 @@ class ProductItemModel {
     };
   }
 
-  factory ProductItemModel.fromMap(
-    Map<String, dynamic> map,
-    String documentID,
-  ) {
+  factory ProductItemModel.fromMap(Map<String, dynamic> map) {
     return ProductItemModel(
-      id: documentID,
-      name: map['name'] as String,
-      imgUrl: map['imgUrl'] as String,
+      id: map['id'] ?? '',
+      name: map['name'] ?? '',
+      imgUrl: map['imgUrl'] ?? '',
       description: map['description'] ?? '',
       price: map['price']?.toDouble() ?? 0.0,
       isFavorite: map['isFavorite'] ?? false,
-      category: map['category'] as String,
+      category: map['category'] ?? '',
       averageRate: map['averageRate']?.toDouble() ?? 0.0,
     );
   }
