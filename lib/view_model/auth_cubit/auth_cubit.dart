@@ -1,3 +1,6 @@
+import 'package:ecommerce_app/models/user_data_model.dart';
+import 'package:ecommerce_app/services/firestore_services.dart';
+import 'package:ecommerce_app/utils/api_paths.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ecommerce_app/services/firebase_auth_service.dart';
 
@@ -7,6 +10,7 @@ class AuthCubit extends Cubit<AuthState> {
   AuthCubit() : super(AuthInitial());
 
   final _authServices = AuthServicesImpl();
+  final _firestoreServices = FirestoreServices.instance;
 
   Future<void> loginWithEmailandPassword(String email, String password) async {
     emit(AuthLoading());
@@ -28,6 +32,7 @@ class AuthCubit extends Cubit<AuthState> {
   Future<void> registerWithEmailandPassword(
     String email,
     String password,
+    String username,
   ) async {
     emit(AuthLoading());
     try {
@@ -36,6 +41,7 @@ class AuthCubit extends Cubit<AuthState> {
         password,
       );
       if (result) {
+        await _saveUserData(email, username);
         emit(AuthSuccess());
       } else {
         emit(AuthFailure('Sign up failed'));
@@ -45,6 +51,21 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
+  Future<void> _saveUserData(String email, String username) async {
+    final currentUser = _authServices.getCurrentUser();
+    final userData = UserDataModel(
+      id: currentUser!.uid,
+      email: email,
+      username: username,
+      createdAt: DateTime.now().toIso8601String(),
+    );
+
+    _firestoreServices.setData(
+      path: ApiPaths.users(userData.id),
+      data: userData.toMap(),
+    );
+  }
+
   void checkAuth() {
     final user = _authServices.getCurrentUser();
     if (user != null) {
@@ -52,7 +73,7 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  Future<void> SignOut() async {
+  Future<void> signOut() async {
     emit(AuthSignigOut());
     try {
       await _authServices.signOut();

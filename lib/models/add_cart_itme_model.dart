@@ -27,6 +27,24 @@ class AddToCartModel {
       quantity: quantity ?? this.quantity,
     );
   }
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'id': id,
+      'size': size.name,
+      'product': product.toMap(),
+      'quantity': quantity,
+    };
+  }
+
+  factory AddToCartModel.fromMap(Map<String, dynamic> map) {
+    return AddToCartModel(
+      id: map['id'] as String,
+      size: ProductSize.fromMap(map['size']),
+      product: ProductItemModel.fromMap(map['product'] as Map<String, dynamic>),
+      quantity: map['quantity'] as int,
+    );
+  }
 }
 
 List<AddToCartModel> dummyCart = [

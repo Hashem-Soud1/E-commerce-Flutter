@@ -1,4 +1,24 @@
-enum ProductSize { S, M, L, XL }
+enum ProductSize {
+  S,
+  M,
+  L,
+  XL;
+
+  static ProductSize fromMap(String size) {
+    switch (size.toUpperCase()) {
+      case 'S':
+        return ProductSize.S;
+      case 'M':
+        return ProductSize.M;
+      case 'L':
+        return ProductSize.L;
+      case 'XL':
+        return ProductSize.XL;
+      default:
+        return ProductSize.S;
+    }
+  }
+}
 
 class ProductItemModel {
   final String id;
@@ -42,6 +62,32 @@ class ProductItemModel {
       isFavorite: isFavorite ?? this.isFavorite,
       category: category ?? this.category,
       averageRate: averageRate ?? this.averageRate,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'id': id,
+      'name': name,
+      'imgUrl': imgUrl,
+      'description': description,
+      'price': price,
+      // 'isFavorite': isFavorite,
+      'category': category,
+      'averageRate': averageRate,
+    };
+  }
+
+  factory ProductItemModel.fromMap(Map<String, dynamic> map) {
+    return ProductItemModel(
+      id: map['id'] ?? '',
+      name: map['name'] ?? '',
+      imgUrl: map['imgUrl'] ?? '',
+      description: map['description'] ?? '',
+      price: map['price']?.toDouble() ?? 0.0,
+      // isFavorite: map['isFavorite'] ?? false,
+      category: map['category'] ?? '',
+      averageRate: map['averageRate']?.toDouble() ?? 0.0,
     );
   }
 }

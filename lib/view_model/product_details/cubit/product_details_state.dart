@@ -32,3 +32,8 @@ final class ProductDetailsError extends ProductDetailsState {
   final String message;
   ProductDetailsError(this.message);
 }
+
+final class ProductAddToCartError extends ProductDetailsState {
+  final String message;
+  ProductAddToCartError(this.message);
+}

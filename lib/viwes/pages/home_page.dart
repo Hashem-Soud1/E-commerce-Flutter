@@ -43,7 +43,7 @@ class HomePage extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Hi, Hashem Eraint',
+                              'Hi, Hashem Erainat',
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
