@@ -8,4 +8,8 @@ class ApiPaths {
 
   static String homeCarouselItems() => 'announcements/'; // home_carousel_items/
   static String categories() => 'categories/'; // categories/
+
+  static String favoriteProduct(String userId, String productId) =>
+      'users/$userId/favorites/$productId';
+  static String favoriteProducts(String userId) => 'users/$userId/favorites/';
 }

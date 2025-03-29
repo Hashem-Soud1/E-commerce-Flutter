@@ -72,7 +72,7 @@ class ProductItemModel {
       'imgUrl': imgUrl,
       'description': description,
       'price': price,
-      'isFavorite': isFavorite,
+      // 'isFavorite': isFavorite,
       'category': category,
       'averageRate': averageRate,
     };
@@ -85,7 +85,7 @@ class ProductItemModel {
       imgUrl: map['imgUrl'] ?? '',
       description: map['description'] ?? '',
       price: map['price']?.toDouble() ?? 0.0,
-      isFavorite: map['isFavorite'] ?? false,
+      // isFavorite: map['isFavorite'] ?? false,
       category: map['category'] ?? '',
       averageRate: map['averageRate']?.toDouble() ?? 0.0,
     );

@@ -1,5 +1,7 @@
 import 'package:ecommerce_app/view_model/cart_state/cubit/cart_cubit.dart';
-import 'package:ecommerce_app/viwes/pages/favarite_page.dart';
+import 'package:ecommerce_app/view_model/favorite_page_cubit/favorite_page_cubit.dart';
+import 'package:ecommerce_app/view_model/home_state/cubit/home_cubit.dart';
+import 'package:ecommerce_app/viwes/pages/favorite_page.dart';
 import 'package:ecommerce_app/viwes/pages/home_page.dart';
 import 'package:ecommerce_app/viwes/pages/cart_page.dart';
 import 'package:ecommerce_app/viwes/pages/profile_page.dart';
@@ -34,7 +36,10 @@ class _CustomBottomNavbarState extends State<CustomBottomNavbar> {
           item: ItemConfig(icon: Icon(Icons.shopping_cart), title: "Carts"),
         ),
         PersistentTabConfig(
-          screen: FavaritePage(),
+          screen: BlocProvider(
+            create: (context) => FavoriteCubit()..getFavoriteProducts(),
+            child: FavoritePage(),
+          ),
           item: ItemConfig(
             icon: Icon(Icons.favorite_outline),
             title: "Favarite",
