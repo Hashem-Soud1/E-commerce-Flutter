@@ -1,50 +1,46 @@
 part of 'add_new_card_cubit.dart';
 
-sealed class AddNewCardState {}
+sealed class PaymentMethodsState {}
 
-final class AddNewCardInitial extends AddNewCardState {}
+final class AddNewCardInitial extends PaymentMethodsState {}
 
-final class AddNewCardLoading extends AddNewCardState {}
+final class AddNewCardLoading extends PaymentMethodsState {}
 
-final class AddNewCardLoded extends AddNewCardState {
-  final PaymentCardModel addNewCardModel;
+final class AddNewCardSuccess extends PaymentMethodsState {}
 
-  AddNewCardLoded({required this.addNewCardModel});
+final class AddNewCardFailure extends PaymentMethodsState {
+  final String errorMessage;
+
+  AddNewCardFailure(this.errorMessage);
 }
 
-final class AddNewCardError extends AddNewCardState {
-  final String message;
+final class FetchingPaymentMethods extends PaymentMethodsState {}
 
-  AddNewCardError(this.message);
-}
-
-final class PaymentCardLoading extends AddNewCardState {}
-
-final class PyamentCardLoded extends AddNewCardState {
+final class FetchedPaymentMethods extends PaymentMethodsState {
   final List<PaymentCardModel> paymentCards;
 
-  PyamentCardLoded(this.paymentCards);
+  FetchedPaymentMethods(this.paymentCards);
 }
 
-final class PaymentCardError extends AddNewCardState {
-  final String message;
+final class FetchPaymentMethodsError extends PaymentMethodsState {
+  final String errorMessage;
 
-  PaymentCardError(this.message);
+  FetchPaymentMethodsError(this.errorMessage);
 }
 
-final class PaymentCardChosenLoded extends AddNewCardState {
+final class PaymentCardChosenLoded extends PaymentMethodsState {
   final PaymentCardModel paymentCardChosen;
 
   PaymentCardChosenLoded(this.paymentCardChosen);
 }
 
-final class ConfirmPaymentMethodLoading extends AddNewCardState {}
+final class ConfirmPaymentMethodLoading extends PaymentMethodsState {}
 
-final class ConfirmPaymentMethodLoded extends AddNewCardState {
+final class ConfirmPaymentMethodLoded extends PaymentMethodsState {
   ConfirmPaymentMethodLoded();
 }
 
-final class ConfirmPaymentMethodError extends AddNewCardState {
+final class ConfirmPaymentMethodError extends PaymentMethodsState {
   final String message;
 
   ConfirmPaymentMethodError(this.message);
