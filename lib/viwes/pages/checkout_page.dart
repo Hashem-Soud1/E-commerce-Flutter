@@ -19,6 +19,7 @@ class CheckoutPage extends StatelessWidget {
     PaymentCardModel? firstCardChosen,
     BuildContext context,
   ) {
+    final checkoutCubit = BlocProvider.of<CheckoutCubit>(context);
     if (firstCardChosen != null) {
       return PaymentMethodItem(
         paymentCard: firstCardChosen,
@@ -32,15 +33,15 @@ class CheckoutPage extends StatelessWidget {
                 height: MediaQuery.of(context).size.height * 0.6,
                 child: BlocProvider(
                   create: (context) {
-                    return AddNewCardCubit()..fetchPaymentMethods();
+                    return PaymentMethodsCubit()..fetchPaymentMethods();
                   },
                   child: const CustomBottomModalSheet(),
                 ),
               );
             },
-          ).then(
-            (onValue) => BlocProvider.of<CheckoutCubit>(context).getCartItems(),
-          );
+          ).then((onValue) {
+            checkoutCubit.getCartItems();
+          });
         },
       );
     } else {
@@ -95,12 +96,13 @@ class CheckoutPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) {
-        final cubit = CheckoutCubit();
-        cubit.getCartItems();
-        return cubit;
-      },
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<CheckoutCubit>(
+          create: (context) => CheckoutCubit()..getCartItems(),
+        ),
+        BlocProvider(create: (context) => PaymentMethodsCubit()),
+      ],
       child: Scaffold(
         appBar: AppBar(title: const Text('Checkout')),
         body: Builder(
@@ -122,9 +124,9 @@ class CheckoutPage extends StatelessWidget {
                 } else if (state is CheckoutError) {
                   return Center(child: Text(state.message));
                 } else if (state is CheckoutLoaded) {
-                  final PaymentCardModel? cardChosen = state.firtsCardChoosen;
+                  final PaymentCardModel? cardChosen = state.CardChoosen;
                   final LocationItemModel? addressChosen =
-                      state.firstLocationChoosen;
+                      state.LocationChoosen;
 
                   final cartItems = state.cartItems;
                   return SafeArea(
@@ -138,8 +140,8 @@ class CheckoutPage extends StatelessWidget {
                               onTap: () {
                                 Navigator.of(context)
                                     .pushNamed(AppRoutes.locationRoute)
-                                    .then((value) {
-                                      cubit.getCartItems();
+                                    .then((value) async {
+                                      await cubit.getCartItems();
                                     });
                               },
                             ),

@@ -11,7 +11,7 @@ class CustomBottomModalSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final paymentMethodsCubit = BlocProvider.of<AddNewCardCubit>(context);
+    final paymentMethodsCubit = BlocProvider.of<PaymentMethodsCubit>(context);
 
     return SingleChildScrollView(
       child: SafeArea(
@@ -34,15 +34,15 @@ class CustomBottomModalSheet extends StatelessWidget {
                 bloc: paymentMethodsCubit,
                 buildWhen:
                     (previous, current) =>
-                        current is PaymentCardLoading ||
-                        current is PyamentCardLoded ||
-                        current is PaymentCardError,
+                        current is FetchingPaymentMethods ||
+                        current is FetchedPaymentMethods ||
+                        current is FetchPaymentMethodsError,
                 builder: (_, state) {
-                  if (state is PaymentCardLoading) {
+                  if (state is FetchingPaymentMethods) {
                     return const Center(
                       child: CircularProgressIndicator.adaptive(),
                     );
-                  } else if (state is PyamentCardLoded) {
+                  } else if (state is FetchedPaymentMethods) {
                     return ListView.builder(
                       shrinkWrap: true,
                       itemCount: state.paymentCards.length,
@@ -78,35 +78,38 @@ class CustomBottomModalSheet extends StatelessWidget {
                             ),
                             title: Text(paymentCard.cardNumber),
                             subtitle: Text(paymentCard.cardHolderName),
-                            trailing:
-                                BlocBuilder<AddNewCardCubit, AddNewCardState>(
-                                  bloc: paymentMethodsCubit,
-                                  buildWhen:
-                                      (previous, current) =>
-                                          current is PaymentCardChosenLoded,
-                                  builder: (context, state) {
-                                    if (state is PaymentCardChosenLoded) {
-                                      final chosenPaymentMethod =
-                                          state.paymentCardChosen;
-                                      return Radio<String>(
-                                        value: paymentCard.id,
-                                        groupValue: chosenPaymentMethod.id,
-                                        onChanged: (id) {
-                                          paymentMethodsCubit
-                                              .changePaymentMethod(id!);
-                                        },
+                            trailing: BlocBuilder<
+                              PaymentMethodsCubit,
+                              PaymentMethodsState
+                            >(
+                              bloc: paymentMethodsCubit,
+                              buildWhen:
+                                  (previous, current) =>
+                                      current is PaymentCardChosenLoded,
+                              builder: (context, state) {
+                                if (state is PaymentCardChosenLoded) {
+                                  final chosenPaymentMethod =
+                                      state.paymentCardChosen;
+                                  return Radio<String>(
+                                    value: paymentCard.id,
+                                    groupValue: chosenPaymentMethod.id,
+                                    onChanged: (id) {
+                                      paymentMethodsCubit.changePaymentMethod(
+                                        id!,
                                       );
-                                    } else {
-                                      return const SizedBox();
-                                    }
-                                  },
-                                ),
+                                    },
+                                  );
+                                } else {
+                                  return const SizedBox();
+                                }
+                              },
+                            ),
                           ),
                         );
                       },
                     );
-                  } else if (state is PaymentCardError) {
-                    return Center(child: Text(state.message));
+                  } else if (state is FetchPaymentMethodsError) {
+                    return Center(child: Text(state.errorMessage));
                   } else {
                     return const SizedBox();
                   }
@@ -115,7 +118,14 @@ class CustomBottomModalSheet extends StatelessWidget {
               const SizedBox(height: 8),
               InkWell(
                 onTap: () {
-                  Navigator.of(context).pushNamed(AppRoutes.addNewCardRoute);
+                  Navigator.of(context)
+                      .pushNamed(
+                        AppRoutes.addNewCardRoute,
+                        arguments: paymentMethodsCubit,
+                      )
+                      .then((value) {
+                        paymentMethodsCubit.fetchPaymentMethods();
+                      });
                 },
                 child: Card(
                   elevation: 0,
@@ -135,7 +145,7 @@ class CustomBottomModalSheet extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 24),
-              BlocConsumer<AddNewCardCubit, AddNewCardState>(
+              BlocConsumer<PaymentMethodsCubit, PaymentMethodsState>(
                 bloc: paymentMethodsCubit,
                 listenWhen:
                     (previous, current) => current is ConfirmPaymentMethodLoded,

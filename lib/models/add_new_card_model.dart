@@ -1,3 +1,5 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+
 class PaymentCardModel {
   final String id;
   final String cardNumber;
@@ -6,7 +8,7 @@ class PaymentCardModel {
   final String cvvCode;
   final bool isChosen;
 
-  PaymentCardModel({
+  const PaymentCardModel({
     required this.id,
     required this.cardNumber,
     required this.cardHolderName,
@@ -30,6 +32,28 @@ class PaymentCardModel {
       expiryDate: expiryDate ?? this.expiryDate,
       cvvCode: cvvCode ?? this.cvvCode,
       isChosen: isChosen ?? this.isChosen,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'id': id,
+      'cardNumber': cardNumber,
+      'cardHolderName': cardHolderName,
+      'expiryDate': expiryDate,
+      'cvvCode': cvvCode,
+      'isChosen': isChosen,
+    };
+  }
+
+  factory PaymentCardModel.fromMap(Map<String, dynamic> map) {
+    return PaymentCardModel(
+      id: map['id'] as String,
+      cardNumber: map['cardNumber'] as String,
+      cardHolderName: map['cardHolderName'] as String,
+      expiryDate: map['expiryDate'] as String,
+      cvvCode: map['cvvCode'] as String,
+      isChosen: map['isChosen'] as bool,
     );
   }
 }

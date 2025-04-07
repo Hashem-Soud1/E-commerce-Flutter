@@ -1,4 +1,3 @@
-import 'package:ecommerce_app/models/add_new_card_model.dart';
 import 'package:ecommerce_app/utils/app_colores.dart';
 import 'package:ecommerce_app/view_model/add_new_card_cudit/add_new_card_cubit.dart';
 import 'package:ecommerce_app/viwes/widgets/label_with_textfield_new_card.dart';
@@ -23,7 +22,7 @@ class _AddNewCardPageState extends State<AddNewCardPage> {
 
   @override
   Widget build(BuildContext context) {
-    final cubit = BlocProvider.of<AddNewCardCubit>(context);
+    final cubit = BlocProvider.of<PaymentMethodsCubit>(context);
     return Scaffold(
       appBar: AppBar(title: const Text('Add New Card')),
       body: SafeArea(
@@ -65,28 +64,28 @@ class _AddNewCardPageState extends State<AddNewCardPage> {
                 SizedBox(
                   width: double.infinity,
                   height: 50,
-                  child: BlocConsumer<AddNewCardCubit, AddNewCardState>(
+                  child: BlocConsumer<PaymentMethodsCubit, PaymentMethodsState>(
                     bloc: cubit,
 
                     listenWhen:
                         (previous, current) =>
-                            current is AddNewCardLoded ||
-                            current is AddNewCardError,
+                            current is AddNewCardSuccess ||
+                            current is AddNewCardFailure,
                     listener: (context, state) {
-                      if (state is AddNewCardLoded) {
+                      if (state is AddNewCardSuccess) {
                         Navigator.pop(context);
                       }
-                      if (state is AddNewCardError) {
-                        ScaffoldMessenger.of(
-                          context,
-                        ).showSnackBar(SnackBar(content: Text(state.message)));
+                      if (state is AddNewCardFailure) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text(state.errorMessage)),
+                        );
                       }
                     },
                     buildWhen:
                         (previous, current) =>
                             current is AddNewCardLoading ||
-                            current is AddNewCardError ||
-                            current is AddNewCardLoded,
+                            current is AddNewCardFailure ||
+                            current is AddNewCardSuccess,
                     builder: (context, state) {
                       if (state is AddNewCardLoading) {
                         ElevatedButton(
@@ -102,13 +101,10 @@ class _AddNewCardPageState extends State<AddNewCardPage> {
                       return ElevatedButton(
                         onPressed: () {
                           cubit.addNewCard(
-                            PaymentCardModel(
-                              id: DateTime.now().toIso8601String(),
-                              cardNumber: _cardNumberController.text,
-                              cardHolderName: _cardHolderNameController.text,
-                              expiryDate: _expiryDateController.text,
-                              cvvCode: _cvvController.text,
-                            ),
+                            _cardNumberController.text,
+                            _cardHolderNameController.text,
+                            _expiryDateController.text,
+                            _cvvController.text,
                           );
                         },
                         style: ElevatedButton.styleFrom(

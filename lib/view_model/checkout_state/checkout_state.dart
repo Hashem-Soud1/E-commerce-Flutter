@@ -10,20 +10,20 @@ final class CheckoutLoaded extends CheckoutState {
   final List<AddToCartModel> cartItems;
   final double totalAmount;
   final int numOfProducts;
-  final PaymentCardModel? firtsCardChoosen;
-  final LocationItemModel? firstLocationChoosen;
+  final PaymentCardModel? CardChoosen;
+  final LocationItemModel? LocationChoosen;
 
   CheckoutLoaded({
     required this.cartItems,
     required this.totalAmount,
     required this.numOfProducts,
-    required this.firtsCardChoosen,
-    required this.firstLocationChoosen,
+    required this.CardChoosen,
+    required this.LocationChoosen,
   });
 }
 
 final class CheckoutError extends CheckoutState {
   final String message;
 
-  CheckoutError({required this.message});
+  CheckoutError(this.message);
 }

@@ -14,4 +14,8 @@ class ApiPaths {
   static String favoriteProduct(String userId, String productId) =>
       'users/$userId/favorites/$productId';
   static String favoriteProducts(String userId) => 'users/$userId/favorites/';
+
+  static String paymentCard(String userId, String paymentId) =>
+      'users/$userId/paymentCards/$paymentId';
+  static String paymentCards(String userId) => 'users/$userId/paymentCards/';
 }
