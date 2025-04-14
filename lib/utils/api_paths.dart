@@ -18,4 +18,8 @@ class ApiPaths {
   static String paymentCard(String userId, String paymentId) =>
       'users/$userId/paymentCards/$paymentId';
   static String paymentCards(String userId) => 'users/$userId/paymentCards/';
+
+  static String location(String userId, String locationId) =>
+      'users/$userId/locations/$locationId';
+  static String locations(String userId) => 'users/$userId/locations/';
 }

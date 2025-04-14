@@ -39,8 +39,8 @@ class CheckoutPage extends StatelessWidget {
                 ),
               );
             },
-          ).then((onValue) {
-            checkoutCubit.getCartItems();
+          ).then((onValue) async {
+            await checkoutCubit.getCheckoutContent();
           });
         },
       );
@@ -99,7 +99,7 @@ class CheckoutPage extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider<CheckoutCubit>(
-          create: (context) => CheckoutCubit()..getCartItems(),
+          create: (context) => CheckoutCubit()..getCheckoutContent(),
         ),
         BlocProvider(create: (context) => PaymentMethodsCubit()),
       ],
@@ -141,7 +141,7 @@ class CheckoutPage extends StatelessWidget {
                                 Navigator.of(context)
                                     .pushNamed(AppRoutes.locationRoute)
                                     .then((value) async {
-                                      await cubit.getCartItems();
+                                      await cubit.getCheckoutContent();
                                     });
                               },
                             ),
@@ -225,6 +225,27 @@ class CheckoutPage extends StatelessWidget {
                                               ),
                                             ],
                                           ),
+                                          Text.rich(
+                                            TextSpan(
+                                              text: 'Quantity: ',
+                                              style: Theme.of(
+                                                context,
+                                              ).textTheme.titleMedium!.copyWith(
+                                                color: AppColors.grey,
+                                              ),
+                                              children: [
+                                                TextSpan(
+                                                  text:
+                                                      cartItem.quantity
+                                                          .toString(),
+                                                  style:
+                                                      Theme.of(
+                                                        context,
+                                                      ).textTheme.titleMedium,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
                                         ],
                                       ),
                                     ),
@@ -236,6 +257,7 @@ class CheckoutPage extends StatelessWidget {
                             const CheckoutHeadlinesItem(
                               title: 'Payment Methods',
                             ),
+
                             const SizedBox(height: 16.0),
                             _buildPyamentMethod(cardChosen, context),
                             const SizedBox(height: 16.0),

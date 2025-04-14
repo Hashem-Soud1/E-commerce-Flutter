@@ -25,12 +25,12 @@ class EmptyShippingAndPayment extends StatelessWidget {
             context,
             AppRoutes.addNewCardRoute,
             arguments: paymentCubit,
-          ).then((value) async => await checkoutCubit.getCartItems());
+          ).then((value) async => await checkoutCubit.getCheckoutContent());
         } else {
           Navigator.pushNamed(context, AppRoutes.locationRoute).then((
             value,
           ) async {
-            await checkoutCubit.getCartItems();
+            await checkoutCubit.getCheckoutContent();
           });
         }
       },

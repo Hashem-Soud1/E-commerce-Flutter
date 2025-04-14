@@ -37,13 +37,11 @@ final class LocalSelectedLocation extends ChooseLocationState {
 final class ShippingMethodLoading extends ChooseLocationState {}
 
 final class ShippingMethodLoaded extends ChooseLocationState {
-  final List<LocationItemModel> locations;
-
-  ShippingMethodLoaded({required this.locations});
+  ShippingMethodLoaded();
 }
 
 final class ShippingMethodError extends ChooseLocationState {
   final String message;
 
-  ShippingMethodError({required this.message});
+  ShippingMethodError(this.message);
 }

@@ -1,3 +1,5 @@
+import 'package:ecommerce_app/services/firebase_auth_service.dart';
+import 'package:ecommerce_app/services/location_services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ecommerce_app/models/location_item_model.dart';
 
@@ -6,67 +8,82 @@ part 'location_page_state.dart';
 class ChooseLocationCubit extends Cubit<ChooseLocationState> {
   ChooseLocationCubit() : super(ChooseLocationInitial());
 
-  String selectedLocation = dummyLocations.first.id;
+  String? selectedLocationId;
+  LocationItemModel? selectedLocation;
 
-  void fetchLocations() {
+  final locationServices = LocationServicesImpl();
+  final authServices = AuthServicesImpl();
+
+  void fetchLocations() async {
     emit(FetchingLocations());
-    Future.delayed(const Duration(seconds: 1), () {
-      emit(FetchedLocations(dummyLocations));
-    });
+    try {
+      final currentUser = authServices.getCurrentUser();
+      final locations = await locationServices.fetchLocations(currentUser!.uid);
+
+      for (var location in locations) {
+        if (location.isChoosen) {
+          selectedLocationId = location.id;
+          selectedLocation = location;
+        }
+      }
+      selectedLocationId ??= locations.first.id;
+      selectedLocation ??= locations.first;
+      emit(FetchedLocations(locations));
+      emit(LocalSelectedLocation(selectedLocation!));
+    } catch (e) {
+      emit(FetchLocationsFailure(e.toString()));
+    }
   }
 
-  void addLocation(String location) {
+  void addLocation(String location) async {
     emit(AddingLocation());
-    Future.delayed(const Duration(seconds: 1), () {
+    try {
       final splittedLocations = location.split('-');
       final locationItem = LocationItemModel(
         id: DateTime.now().toIso8601String(),
         city: splittedLocations[0],
         country: splittedLocations[1],
       );
-      dummyLocations.add(locationItem);
+      final currentUser = authServices.getCurrentUser();
+      await locationServices.setLocation(locationItem, currentUser!.uid);
       emit(LocationAdded());
-      emit(FetchedLocations(dummyLocations));
-    });
+      final locations = await locationServices.fetchLocations(currentUser.uid);
+      emit(FetchedLocations(locations));
+    } catch (e) {
+      emit(LocationAddingFailure(e.toString()));
+    }
   }
 
-  void selectLocation(String id) {
-    selectedLocation = id;
-    var tempChoosenLocation = dummyLocations.firstWhere(
-      (element) => element.id == id,
+  Future<void> selectLocation(String id) async {
+    selectedLocationId = id;
+
+    final currentUser = authServices.getCurrentUser();
+    final chosenLocation = await locationServices.fetchLocation(
+      currentUser!.uid,
+      id,
     );
-
-    emit(LocalSelectedLocation(tempChoosenLocation));
+    selectedLocation = chosenLocation;
+    emit(LocalSelectedLocation(chosenLocation));
   }
 
-  void confirmLocation() {
-    emit(ShippingMethodLoading());
-
-    Future.delayed(const Duration(seconds: 1), () {
-      var ChoosenLocation = dummyLocations.firstWhere(
-        (element) => element.id == selectedLocation,
+  Future<void> confirmAddress() async {
+    try {
+      final currentUser = authServices.getCurrentUser();
+      var previousChosenLocations = await locationServices.fetchLocations(
+        currentUser!.uid,
+        true,
       );
-
-      var previousLocation = dummyLocations.firstWhere(
-        (element) => element.isChoosen == true,
-        orElse: () => dummyLocations.first,
-      );
-
-      previousLocation = previousLocation.copyWith(isChoosen: false);
-      ChoosenLocation = ChoosenLocation.copyWith(isChoosen: true);
-
-      final previousIndex = dummyLocations.indexWhere(
-        (element) => element.id == previousLocation.id,
-      );
-
-      final choosenIndex = dummyLocations.indexWhere(
-        (element) => element.id == ChoosenLocation.id,
-      );
-
-      dummyLocations[previousIndex] = previousLocation;
-      dummyLocations[choosenIndex] = ChoosenLocation;
-
-      emit(ShippingMethodLoaded(locations: dummyLocations));
-    });
+      if (previousChosenLocations.isNotEmpty) {
+        var previousLocation = previousChosenLocations.first;
+        previousLocation = previousLocation.copyWith(isChoosen: false);
+        await locationServices.setLocation(previousLocation, currentUser.uid);
+        await locationServices.setLocation(previousLocation, currentUser.uid);
+      }
+      selectedLocation = selectedLocation!.copyWith(isChoosen: true);
+      await locationServices.setLocation(selectedLocation!, currentUser.uid);
+      emit(ShippingMethodLoaded());
+    } catch (e) {
+      emit(ShippingMethodError(e.toString()));
+    }
   }
 }

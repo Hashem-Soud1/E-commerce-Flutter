@@ -1,3 +1,5 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+
 class LocationItemModel {
   final String id;
   final String city;
@@ -29,10 +31,24 @@ class LocationItemModel {
       isChoosen: isChoosen ?? this.isChoosen,
     );
   }
-}
 
-List<LocationItemModel> dummyLocations = [
-  LocationItemModel(id: '1', city: 'Cairo', country: 'Egypt'),
-  LocationItemModel(id: '2', city: 'Gaza', country: 'Palestine'),
-  LocationItemModel(id: '3', city: 'Dubai', country: 'UAE'),
-];
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'id': id,
+      'city': city,
+      'country': country,
+      'imgUrl': imgUrl,
+      'isChoosen': isChoosen,
+    };
+  }
+
+  factory LocationItemModel.fromMap(Map<String, dynamic> map) {
+    return LocationItemModel(
+      id: map['id'] as String,
+      city: map['city'] as String,
+      country: map['country'] as String,
+      imgUrl: map['imgUrl'] as String,
+      isChoosen: map['isChoosen'] as bool,
+    );
+  }
+}

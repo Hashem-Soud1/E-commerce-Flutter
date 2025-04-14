@@ -199,7 +199,7 @@ class _ChooseLocationPageState extends State<ChooseLocationPage> {
                     return MainButton(
                       text: 'Confirm Address',
                       onTap: () {
-                        cubit.confirmLocation();
+                        cubit.confirmAddress();
                       },
                     );
                   },
