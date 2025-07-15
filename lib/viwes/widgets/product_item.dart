@@ -17,8 +17,8 @@ class ProductItem extends StatelessWidget {
         Stack(
           children: [
             Container(
-              height: 110,
-              width: 180,
+              height: 90,
+              width: 150,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12.0),
                 color: Colors.grey.shade200,
@@ -95,7 +95,7 @@ class ProductItem extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(height: 4.0),
+        const SizedBox(height: 10.0),
         Text(
           productItem.name,
           style: Theme.of(
@@ -106,7 +106,7 @@ class ProductItem extends StatelessWidget {
           productItem.category,
           style: Theme.of(
             context,
-          ).textTheme.labelSmall!.copyWith(color: Colors.grey),
+          ).textTheme.titleSmall!.copyWith(color: Colors.grey),
         ),
         Text(
           '\$${productItem.price}',

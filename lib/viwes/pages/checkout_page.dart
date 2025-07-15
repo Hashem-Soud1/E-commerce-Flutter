@@ -8,6 +8,7 @@ import 'package:ecommerce_app/view_model/checkout_state/checkout_cubit.dart';
 import 'package:ecommerce_app/viwes/widgets/bottom_modal_sheet.dart';
 import 'package:ecommerce_app/viwes/widgets/checkout_headlines_item.dart';
 import 'package:ecommerce_app/viwes/widgets/empty_shipping__payment.dart';
+import 'package:ecommerce_app/viwes/widgets/label_with_value_row.dart';
 import 'package:ecommerce_app/viwes/widgets/payment_method_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -263,22 +264,21 @@ class CheckoutPage extends StatelessWidget {
                             const SizedBox(height: 16.0),
                             Divider(color: AppColors.grey),
                             const SizedBox(height: 16.0),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  'Total Amount',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .titleMedium!
-                                      .copyWith(color: AppColors.grey),
-                                ),
-                                Text(
+                            LabelWithValueRow(
+                              label: 'Subtotal',
+                              value: '\$${state.subtotal.toStringAsFixed(1)}',
+                            ),
+                            const SizedBox(height: 12),
+                            LabelWithValueRow(
+                              label: 'Shipping',
+                              value:
+                                  '\$${state.shippingValue.toStringAsFixed(1)}',
+                            ),
+                            const SizedBox(height: 12),
+                            LabelWithValueRow(
+                              label: 'Total Amount',
+                              value:
                                   '\$${state.totalAmount.toStringAsFixed(1)}',
-                                  style:
-                                      Theme.of(context).textTheme.titleMedium,
-                                ),
-                              ],
                             ),
                             const SizedBox(height: 40.0),
                             SizedBox(

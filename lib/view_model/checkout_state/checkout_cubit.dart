@@ -33,13 +33,19 @@ class CheckoutCubit extends Cubit<CheckoutState> {
         (previousValue, element) => previousValue + element.quantity,
       );
 
+      final paymentMethods = await checkoutServices.fetchPaymentMethods(
+        currentUser.uid,
+        true,
+      );
       final chosenPaymentCard =
-          (await checkoutServices.fetchPaymentMethods(
-            currentUser.uid,
-            true,
-          )).first;
-      final chosenAddress =
-          (await locationServices.fetchLocations(currentUser.uid, true)).first;
+          paymentMethods.isNotEmpty ? paymentMethods.first : null;
+
+      final locations = await locationServices.fetchLocations(
+        currentUser.uid,
+        true,
+      );
+      final chosenAddress = locations.isNotEmpty ? locations.first : null;
+
       emit(
         CheckoutLoaded(
           cartItems: cartItems,

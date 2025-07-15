@@ -21,17 +21,11 @@ class EmptyShippingAndPayment extends StatelessWidget {
     return InkWell(
       onTap: () {
         if (isPayment) {
-          Navigator.pushNamed(
-            context,
-            AppRoutes.addNewCardRoute,
-            arguments: paymentCubit,
-          ).then((value) async => await checkoutCubit.getCheckoutContent());
+          Navigator.of(context)
+              .pushNamed(AppRoutes.addNewCardRoute, arguments: paymentCubit)
+              .then((value) async => await checkoutCubit.getCheckoutContent());
         } else {
-          Navigator.pushNamed(context, AppRoutes.locationRoute).then((
-            value,
-          ) async {
-            await checkoutCubit.getCheckoutContent();
-          });
+          Navigator.of(context).pushNamed(AppRoutes.locationRoute);
         }
       },
       child: Container(
